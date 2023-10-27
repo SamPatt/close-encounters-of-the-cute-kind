@@ -29,25 +29,58 @@ This is a maze navigation game. The player controls a space explorer who is sear
 
 ### Generate / display the maze
 
-- Create an array of arrays with each value representing a cell of the maze, with differing numerical values for space, walls, and various tokens
-  - The arrays will be manually created initially to ensure the maze is usable
-- Loop through the array and use the values to assign different CSS classes, create / CSS grid / flexboxes / HTML Table (unsure which is best)
+maze = array of arrays 
+    - values: space, walls, player, enemy, creature tokens
+    - manually initialize to ensure usability
+
+for each row in maze:
+    for each cell in row:
+        if cell value is space:
+            assign CSS class for space
+        if cell value is wall:
+            assign CSS class for wall
+        if cell value is player:
+            assign CSS class for player
+        if cell value is enemy:
+            assign CSS class for enemy
+        if cell value is creature:
+            assign CSS class for creature
+
+display maze using CSS grid/flexbox/HTML Table (TBD)
+
 
 ### Navigation
 
-- The player token will be represented by a certain value in the maze array
-- attach event listeners for WASD / Arrow keypresses
-- check which array value lies in the direction of the keypress
-  - if path, swap path and token values in the array (move forward)
-  - if wall, ignore input
-  - if enemy / obstacle, lose life and replace player token at start
-    - or game over if lives are out
-  - if cute creature
-    - check if all cute creatures are found, 
-      - Yes > trigger win condition
-      - No > positive visual indicator in UI but game continues
+playerPosition = starting position in maze
+
+attach event listeners for WASD/Arrow keys:
+    on keypress:
+        determine direction of movement
+        get cell value in desired direction:
+            if cell is path:
+                swap player and path values (move player)
+            if cell is wall:
+                do nothing (block movement)
+            if cell is enemy:
+                decrease player lives by 1
+                if lives are 0:
+                    trigger game over
+                else:
+                    reset player position to start
+            if cell is creature:
+                check if all creatures found:
+                    if all are found:
+                        trigger win condition
+                    else:
+                        display positive UI indicator
+                        (stretch) display modal with creature, post image on edge of screen, play camera sound, mark creature as found
+
 
 ### UI
 
-- Display lives in top corner, hide each when lives lost
-- (stretch goal) add click event listeners to intro / win / game over screens to allow users to clear them
+display player lives in top corner
+
+for each life lost:
+    hide one life from display
+
+(stretch) add click listeners to intro/win/game over screens to dismiss them
