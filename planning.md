@@ -27,7 +27,7 @@ This is a maze navigation game. The player controls a space explorer who is sear
 
 ## Pseudocode
 
-### Generate / display the maze
+```
 
 maze = array of arrays 
     - values: space, walls, player, enemy, creature tokens
@@ -48,8 +48,6 @@ for each row in maze:
 
 display maze using CSS grid/flexbox/HTML Table (TBD)
 
-
-### Navigation
 
 playerPosition = starting position in maze
 
@@ -76,11 +74,10 @@ attach event listeners for WASD/Arrow keys:
                         (stretch) display modal with creature, post image on edge of screen, play camera sound, mark creature as found
 
 
-### UI
-
 display player lives in top corner
 
 for each life lost:
     hide one life from display
 
 (stretch) add click listeners to intro/win/game over screens to dismiss them
+```
