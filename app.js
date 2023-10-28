@@ -169,8 +169,16 @@ function makeMazeDiv(classValue){
     mazeEl.appendChild(divEl)
 }
 
+function randomNumber(max){
+    return Math.floor(Math.random() * max);
+}
+
 function renderEnemyModal(){
-    showModal('DANGER!', './imgs/enemy.png', `The JoyVoids attack! <br><br> Lives remaining: ${player.lives}`, 'enemy');
+    const enemyImages = ['./imgs/enemy.png', './imgs/enemy2.png', './imgs/enemy3.png']
+    const enemyText = [`"Your desire for aesthetic beauty disgusts me."`, `"Cute is subjective. Tell me I'm cute or I'll blow up your ship."`, `"Why save them? They won't even remember you after you're gone."` ]
+    let randomImage = enemyImages[randomNumber(enemyImages.length)]
+    let randomText = enemyText[randomNumber(enemyText.length)]
+    showModal('The JoyVoids attack!', randomImage, `${randomText} <br><br> Lives remaining: ${player.lives}`, 'enemy');
     
 }
 
@@ -186,16 +194,26 @@ function showModal(title, imgSrc, description, type) {
     } //... handle other types similarly
 
     document.getElementById('modal').classList.remove('hidden');
+
+    // Add event listeners to close modal
+    document.addEventListener('keydown', closeModal);
+    document.getElementById('modal').addEventListener('click', handleModalClickOutside);
 }
 
-document.getElementById('modal-close').addEventListener('click', () => {
+function closeModal() {
     document.getElementById('modal').classList.add('hidden');
-    render()
-});
+    render();
 
-// Example use:
+    // Remove the event listeners
+    document.removeEventListener('keydown', closeModal);
+    document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+}
 
-
+function handleModalClickOutside(event) {
+    if (event.target === document.getElementById('modal')) {
+        closeModal();
+    }
+}
 
 function renderMaze(){
     mazeEl.innerHTML = ''
