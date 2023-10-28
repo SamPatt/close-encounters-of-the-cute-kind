@@ -2,7 +2,6 @@
 
 * {
     box-sizing: border-box;
-    border: 1px solid red;
 }
 
 body {
@@ -35,12 +34,11 @@ body {
     display: grid;
     grid-template-rows: repeat(9, 1fr);
     grid-template-columns: repeat(16, 1fr);
-    gap: 5px;
     height: 41vw;
 }
 
 #maze > div {
-    border: 1px solid blue;
+
 }
 
 #photos {
@@ -65,13 +63,13 @@ body {
     background-color: black;
 }
 
-.wall-asteroid {
+/* .wall-asteroid {
     background-image: url('./imgs/asteroidBackground1.png');
     background-size: cover;
     background-repeat: no-repeat;
-}
+} */
 
-.wall-stars {
+.wall {
     background-image: url('./imgs/starBackground1.png');
     background-size: cover;
     background-repeat: no-repeat;
