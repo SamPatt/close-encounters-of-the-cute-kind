@@ -3,7 +3,7 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [2, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -23,7 +23,10 @@ const gridClasses = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
-const player = PLAYER_START // Sets the player object as a copy of the PLAYER_START object
+const player = {
+    ...PLAYER_START,
+    mazePosition: [...PLAYER_START.mazePosition]
+}; // Sets the player object as a copy of the PLAYER_START object
 
 
 
@@ -36,6 +39,7 @@ const mazeEl = document.querySelector('#maze')
 document.addEventListener("keydown", keyBehavior);
 
 function keyBehavior(e) {
+    e.preventDefault(); // The browser scrolling on keypress is annoying so this prevents it
   if (e.key === "ArrowUp") {
     movePlayer('up')
   } else if (e.key === "ArrowDown") {
@@ -50,30 +54,106 @@ function keyBehavior(e) {
 /*----- functions -----*/
 
 // TODO: Determine the flow for updating map / triggering actions after movement
-    // event listner calls movePlayer, which calls checkMazeMovement to check for a valid move
+    // event listener calls movePlayer, which calls checkMazeMovement to check for a valid move
         // where to add in player position update and check if collisions with non-wall cells?
         // already in checkMazeMovement, could extend
 
 
-// This function checks if the user is trying to make a valid move
-function checkMazeMovement(movementDirection){
-    
-    let desiredCell;
-    if(movementDirection === 'up'){
-        desiredCell = maze[player.mazePosition[0] - 1][player.mazePosition[1]];
-        console.log(desiredCell)
-        if (desiredCell === 1){
-            console.log('Wall; no movement')
-            return false
-        } else {
-            return true
-        }
-    } else {
-        return true
+function movePlayer(direction){
+    let desiredCell = getDesiredMoveCell(direction)
+    console.log(desiredCell)
+    let desiredCellValue = maze[desiredCell[0]][desiredCell[1]]
+    if(desiredCellValue === 1){
+        return
+    } else if(desiredCellValue === 0){
+        moveOnPath(desiredCell)
+    } else if(desiredCellValue === 3){
+        moveIntoEnemy(desiredCell)
+    } else if(desiredCellValue === 4){
+        moveIntoObstacle(desiredCell)
+    } else if(desiredCellValue === 5){
+        moveIntoCreature(desiredCell)
     }
+    return
+}
+
+function moveOnPath(desiredCell){
+    let cellMovedFrom = player.mazePosition
+    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
+    player.mazePosition = desiredCell
+    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    // let desiredCellValue = maze[desiredCell[0]][desiredCell[1]]
+    render()
+
+}
+
+function moveIntoEnemy(){
+    let cellMovedFrom = player.mazePosition
+    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
+    enemyCollision()
+}
+
+function moveIntoObstacle(desiredCell){
+    let cellMovedFrom = player.mazePosition
+    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
+    player.mazePosition = desiredCell
+    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    obstacleCollision()
+}
+
+function moveIntoCreature(desiredCell){
+    let cellMovedFrom = player.mazePosition
+    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
+    player.mazePosition = desiredCell
+    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    creatureCollision()
+}
+
+function getDesiredMoveCell(directionOfMove) {
+    let desiredPosition;
+    if (directionOfMove === 'up') {
+        desiredPosition = [player.mazePosition[0] - 1, player.mazePosition[1]];
+    } else if (directionOfMove === 'down') {
+        desiredPosition = [player.mazePosition[0] + 1, player.mazePosition[1]];
+    } else if (directionOfMove === 'right') {
+        desiredPosition = [player.mazePosition[0], player.mazePosition[1] + 1];
+    } else if (directionOfMove === 'left') {
+        desiredPosition = [player.mazePosition[0], player.mazePosition[1] - 1];
+    }
+    return desiredPosition;
+}
+
+function enemyCollision(){
+    player.lives -= 1
+    console.log(player.lives)
+    if(player.lives < 0){
+        triggerGameOver('enemy')
+    } else {
+        renderEnemyModal()
+    }
+    player.mazePosition = PLAYER_START.mazePosition
+    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+}
+
+
+
+function obstacleCollision(){
+    // minigame asteroid destruction
+    // if player succeeds, clear obstacle and continue
+    // if fail, lose life
+        // if no lives, triggerGameOver('obstacle')
+        render()
+}
+
+function creatureCollision(){
+    render()
 }
 
 function updatePlayerPosition(){
+
+}
+
+function triggerGameOver(){
 
 }
 
@@ -81,25 +161,41 @@ function updateMaze(){
     
 }
 
-function movePlayer(direction){
-    if(!checkMazeMovement(direction)){ // TODO - tie into keypress event handler
-        return
-    } else {
-        console.log('Valid move')
 
-    }
-}
 
 function makeMazeDiv(classValue){
     const divEl = document.createElement('div')
-    // ICEBOX - Allow for more wall styling which doesn't update with each render
-    // if(classValue === 1){
-    //     const randomChoice = Math.random() < 0.5 ? 'wall-asteroid' : 'wall-stars';
-    //     divEl.classList.add(randomChoice)
-    // }
     divEl.classList.add(gridClasses[classValue])
     mazeEl.appendChild(divEl)
 }
+
+function renderEnemyModal(){
+    showModal('DANGER!', './imgs/enemy.png', `The JoyVoids attack! <br><br> Lives remaining: ${player.lives}`, 'enemy');
+    
+}
+
+
+function showModal(title, imgSrc, description, type) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-image').src = imgSrc;
+    document.getElementById('modal-description').innerHTML = description;
+
+    // Additional logic based on type
+    if (type === 'enemy') {
+        // enemy-specific logic
+    } //... handle other types similarly
+
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+document.getElementById('modal-close').addEventListener('click', () => {
+    document.getElementById('modal').classList.add('hidden');
+    render()
+});
+
+// Example use:
+
+
 
 function renderMaze(){
     mazeEl.innerHTML = ''
@@ -116,11 +212,43 @@ function renderPhoto(){
 }
 
 function render(){
-
+    renderMaze()
+    renderPhoto()
 }
 
 function init(){
 
 }
 
-renderMaze()
+render()
+
+
+
+
+/** OLD CODE
+ * 
+ * // This function checks if the user is trying to make a valid move
+// function checkIfWall(movementDirection){
+    
+//     let desiredCell;
+//     if(movementDirection === 'up'){
+//         desiredCell = maze[player.mazePosition[0] - 1][player.mazePosition[1]];
+//         console.log(desiredCell)
+//         if (desiredCell === 1){
+//             console.log('Wall; no movement')
+//             return false
+//         } else {
+//             return true
+//         }
+//     } else {
+//         return true
+//     }
+// }
+
+    // ICEBOX - Allow for more wall styling which doesn't update with each render
+    // if(classValue === 1){
+    //     const randomChoice = Math.random() < 0.5 ? 'wall-asteroid' : 'wall-stars';
+    //     divEl.classList.add(randomChoice)
+    // }
+
+ */
