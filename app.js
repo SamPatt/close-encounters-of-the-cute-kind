@@ -49,6 +49,12 @@ function keyBehavior(e) {
 
 /*----- functions -----*/
 
+// TODO: Determine the flow for updating map / triggering actions after movement
+    // event listner calls movePlayer, which calls checkMazeMovement to check for a valid move
+        // where to add in player position update and check if collisions with non-wall cells?
+        // already in checkMazeMovement, could extend
+
+
 // This function checks if the user is trying to make a valid move
 function checkMazeMovement(movementDirection){
     
@@ -65,6 +71,14 @@ function checkMazeMovement(movementDirection){
     } else {
         return true
     }
+}
+
+function updatePlayerPosition(){
+
+}
+
+function updateMaze(){
+    
 }
 
 function movePlayer(direction){
