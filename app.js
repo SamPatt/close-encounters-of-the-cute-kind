@@ -42,8 +42,11 @@ function movePlayer(){
 
 function makeMazeDiv(classValue){
     const divEl = document.createElement('div')
+    if(classValue === 1){
+        const randomChoice = Math.random() < 0.5 ? 'wall-asteroid' : 'wall-stars';
+        divEl.classList.add(randomChoice)
+    }
     divEl.classList.add(gridClasses[classValue])
-    divEl.innerText = 'YAY'
     mazeEl.appendChild(divEl)
 }
 

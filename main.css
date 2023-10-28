@@ -64,9 +64,20 @@ body {
 .path {
     background-color: black;
 }
-.wall {
-    background-color: gray
+
+.wall-asteroid {
+    background-image: url('./imgs/asteroidBackground1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
+.wall-stars {
+    background-image: url('./imgs/starBackground1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
 .player {
     background-color: green;
 }
