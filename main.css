@@ -60,3 +60,22 @@ body {
 .footer {
     padding: 10px 20px;
 }
+
+.path {
+    background-color: black;
+}
+.wall {
+    background-color: gray
+}
+.player {
+    background-color: green;
+}
+.enemy {
+    background-color: red;
+}
+.obstacle {
+    background-color: yellow;
+}
+.creature {
+    background-color: purple;
+}
