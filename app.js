@@ -3,7 +3,7 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -20,6 +20,17 @@ const PLAYER_START = {
 }
 
 const gridClasses = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
+
+const STORYLINE = `
+    It's the year 2241, and humanity is... bored.
+
+    You're just launching your career as a space influencer, and you have a plan: find the 
+    cutest creatures in the galaxy and share them with the world!
+
+    But beware: there aren't any laws out here, and many space influencers are little more 
+    than pirates, out to destroy their competition. Avoid other ships at all costs!
+`;
+
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
@@ -174,11 +185,11 @@ function randomNumber(max){
 }
 
 function renderEnemyModal(){
-    const enemyImages = ['./imgs/enemy.png', './imgs/enemy2.png', './imgs/enemy3.png']
-    const enemyText = [`"Your desire for aesthetic beauty disgusts me."`, `"Cute is subjective. Tell me I'm cute or I'll blow up your ship."`, `"Why save them? They won't even remember you after you're gone."` ]
+    const enemyImages = ['./imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png']
+    const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"My followers love a good explosion."`, `"Oh good, fresh content."`, `"What a pathetic sub count. I'll put you out of your misery."` ]
     let randomImage = enemyImages[randomNumber(enemyImages.length)]
     let randomText = enemyText[randomNumber(enemyText.length)]
-    showModal('The JoyVoids attack!', randomImage, `${randomText} <br><br> Lives remaining: ${player.lives}`, 'enemy');
+    showModal('Another ship attacked you!', randomImage, `${randomText} <br><br> Lives remaining: ${player.lives}`, 'enemy');
     
 }
 
@@ -191,7 +202,9 @@ function showModal(title, imgSrc, description, type) {
     // Additional logic based on type
     if (type === 'enemy') {
         // enemy-specific logic
-    } //... handle other types similarly
+    } else if (type === 'intro') {
+    }
+    //... handle other types similarly
 
     document.getElementById('modal').classList.remove('hidden');
 
@@ -199,6 +212,7 @@ function showModal(title, imgSrc, description, type) {
     document.addEventListener('keydown', closeModal);
     document.getElementById('modal').addEventListener('click', handleModalClickOutside);
 }
+
 
 function closeModal() {
     document.getElementById('modal').classList.add('hidden');
@@ -235,11 +249,11 @@ function render(){
 }
 
 function init(){
-
+    showModal("Close Encounters of the Cute Kind", "./imgs/hero2.png", STORYLINE, 'intro');
 }
 
 render()
-
+init()
 
 
 
