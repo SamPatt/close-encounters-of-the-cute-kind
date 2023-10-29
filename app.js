@@ -3,7 +3,7 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [2, 0, 0, 0, 1, 0, 5, 5, 5, 5, 5, 0, 0, 4, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -24,7 +24,7 @@ const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
 
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
 
-const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_4.png']
+const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_5.png', './imgs/species_4.png', './imgs/species_6.png']
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -36,6 +36,7 @@ const STORYLINE = `
     their cutthroat tactics. <b>Avoid other ships at all costs</b>.
 `;
 
+const speciesInstances = {};
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
@@ -46,10 +47,20 @@ const player = {
 
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
-
+class Species {
+    constructor(speciesName, image, levelDiscovered){
+        this.speciesName = speciesName
+        this.image = image
+        this.levelDiscovered = levelDiscovered
+    }
+}
 
 /*----- cached elements  -----*/
 const mazeEl = document.querySelector('#maze')
+const speciesPhotoTopEl = document.querySelector('#photo-top')
+const speciesPhotoBottomEl = document.querySelector('#photo-bottom')
+const speciesDescriptionTopEl = document.querySelector('#photo-top-description')
+const speciesDescriptionBottomEl = document.querySelector('#photo-bottom-description')
 
 /*----- event listeners -----*/
 document.addEventListener("keydown", keyBehavior);
@@ -190,13 +201,17 @@ function renderCreatureModal(){
     let randomNumSpeciesImage = randomNumber(speciesImages.length)
     let randomSpecies = speciesNames[randomNumSpeciesName]
     let randomImage = speciesImages[randomNumSpeciesImage]
+    speciesInstances[randomSpecies] = new Species(randomSpecies, randomImage, player.level);
+
+    console.log(speciesInstances)
     const congratsText = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
     let randomCongratsText = congratsText[randomNumber(congratsText.length)]
 
     speciesNames.splice(randomNumSpeciesName, 1)  // Removes the used species name so that it can't be duplicated later
     speciesImages.splice(randomNumSpeciesImage, 1)
-    
+    renderPhoto(randomSpecies)
     showModal("You found a new species!", randomImage, `${randomCongratsText} You decide to name them: <h2>${randomSpecies}</h2>Well done! New species found: ${player.creaturesFound}`, 'creature');
+
 }
 
 function renderEnemyModal(){
@@ -254,13 +269,21 @@ function renderMaze(){
     }
 }
 
-function renderPhoto(){
-
+function renderPhoto(name){
+    if(speciesPhotoTopEl.classList.contains('blank')){
+        speciesPhotoTopEl.src = speciesInstances[name].image
+        speciesPhotoTopEl.classList.remove('blank')
+        speciesDescriptionTopEl.innerHTML = `Species: <b>${name}</b>`
+    } else {
+        speciesPhotoBottomEl.classList.contains('blank')
+            speciesPhotoBottomEl.src = speciesInstances[name].image
+            speciesPhotoBottomEl.classList.remove('blank')
+            speciesDescriptionBottomEl.innerHTML = `Species: <b>${name}</b>`
+    }
 }
 
 function render(){
     renderMaze()
-    renderPhoto()
 }
 
 function init(){

@@ -74,7 +74,7 @@ img {
 }
 
 .photo-description {
-    margin-left: 25px;
+
 }
 
 .footer {
@@ -99,7 +99,8 @@ img {
 }
 
 .player {
-    background-color: green;
+    background-image: url(./imgs/ship.png);
+    transition: transform 0.3s ease;
 }
 .enemy {
     background-color: red;
@@ -134,25 +135,4 @@ img {
 
 .hidden {
     display: none;
-}
-
-#creature-name-input {
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #555;
-    border-radius: 4px;
-    width: 70%;
-}
-
-#name-confirm-button {
-    padding: 8px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#name-confirm-button:hover {
-    background-color: #45a049;
 }
