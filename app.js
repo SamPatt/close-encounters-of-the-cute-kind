@@ -16,19 +16,20 @@ const MAP_LEVEL_ONE = [
 const PLAYER_START = {
     lives: 3,
     creaturesFound: 0,
-    mazePosition: [1, 0]
+    mazePosition: [1, 0],
+    level: 1
 }
 
 const gridClasses = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
 
 const STORYLINE = `
-    It's the year 2241, and humanity is... bored.
+    It's the year 2241, and humanity is... bored. <br><br>
 
-    You're just launching your career as a space influencer, and you have a plan: find the 
-    cutest creatures in the galaxy and share them with the world!
+    You're just launching your career as an space wildlife photographer, and you have a plan: find the 
+    cutest creatures in the galaxy and share them with the world! <br><br>
 
-    But beware: there aren't any laws out here, and many space influencers are little more 
-    than pirates, out to destroy their competition. Avoid other ships at all costs!
+    But beware: there aren't any laws in deep space, and many "Starstreamers" are notorious for 
+    their cutthroat tactics. <b>Avoid other ships at all costs</b>.
 `;
 
 
@@ -157,6 +158,8 @@ function obstacleCollision(){
 }
 
 function creatureCollision(){
+    player.creaturesFound += 1
+
     render()
 }
 
@@ -165,6 +168,10 @@ function updatePlayerPosition(){
 }
 
 function triggerGameOver(){
+
+}
+
+function triggerNextLevel(){
 
 }
 
@@ -254,6 +261,19 @@ function init(){
 
 render()
 init()
+
+
+
+/**TODO
+ * Add obstacle photos and modal
+ * Add creature photos and modal
+ * add obstacle mini-game
+ * add in game over modal
+ * create a reset
+ * add sounds
+ * 
+ *  */ 
+    
 
 
 
