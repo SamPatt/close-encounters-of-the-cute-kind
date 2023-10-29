@@ -14,7 +14,7 @@ const MAP_LEVEL_ONE = [
 ];
 
 const PLAYER_START = {
-    lives: 3,
+    fuelCells: 3,
     creaturesFound: 0,
     mazePosition: [1, 0],
     level: 1
@@ -33,7 +33,7 @@ const STORYLINE = `
     cutest creatures in the galaxy and share them with the world! <br><br>
 
     But beware: there aren't any laws in deep space, and many "Starstreamers" are notorious for 
-    their cutthroat tactics. <b>Avoid other ships at all costs</b>.
+    stealing precious fuel cells. <b>Avoid other ships at all costs</b>.
 `;
 
 const speciesInstances = {};
@@ -152,9 +152,9 @@ function getDesiredMoveCell(directionOfMove) {
 }
 
 function enemyCollision(){
-    player.lives -= 1
-    console.log(player.lives)
-    if(player.lives < 0){
+    player.fuelCells -= 1
+    console.log(player.fuelCells)
+    if(player.fuelCells < 0){
         triggerGameOver('enemy')
     } else {
         renderEnemyModal()
@@ -169,7 +169,7 @@ function obstacleCollision(){
     // minigame asteroid destruction
     // if player succeeds, clear obstacle and continue
     // if fail, lose life
-        // if no lives, triggerGameOver('obstacle')
+        // if no fuelCells, triggerGameOver('obstacle')
         render()
 }
 
@@ -181,7 +181,7 @@ function creatureCollision(){
 
 
 function triggerGameOver(){
-
+    showModal('GAME OVER', './imgs/fuel3.png', `You ran out of fuel!`, 'gameOver');
 }
 
 function triggerNextLevel(){
@@ -225,10 +225,10 @@ function renderCreatureModal(){
 
 function renderEnemyModal(){
     const enemyImages = ['./imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png']
-    const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"My followers love a good explosion."`, `"Oh good, fresh content."`, `"What a pathetic sub count. I'll put you out of your misery."` ]
+    const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"You're just wasting fuel out here, loser."`, `"Oh good, fresh content."`, `"I know it's wrong but ... meh, I don't really care."` ]
     let randomImage = enemyImages[randomNumber(enemyImages.length)]
     let randomText = enemyText[randomNumber(enemyText.length)]
-    showModal('Another ship attacked you!', randomImage, `${randomText} <br><br> Lives remaining: ${player.lives}`, 'enemy');
+    showModal('Another ship attacked you!', randomImage, `${randomText} <br><br>-1 Fuel cells. Fuel Cells remaining: ${player.fuelCells}`, 'enemy');
     
 }
 
@@ -255,11 +255,14 @@ function showModal(title, imgSrc, description, type) {
 
 function closeModal() {
     document.getElementById('modal').classList.add('hidden');
+    // TODO: add in a fuel cell check and the gameover call here  so that it won't interrupt other modals
     render();
 
     // Remove the event listeners
+    
     document.removeEventListener('keydown', closeModal);
     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+
 }
 
 function handleModalClickOutside(event) {
