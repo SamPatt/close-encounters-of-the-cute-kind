@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh; /* viewport height */
-    background-color: rgb(12, 12, 12);
+    background-color: rgb(0, 0, 0);
     color: rgb(229, 231, 230);
 }
 
@@ -89,7 +89,7 @@ img {
 } */
 
 .wall {
-    background-image: url('./imgs/starBackground1.png');
+    background-image: url('./imgs/star1.png');
     background-size: cover;
     background-repeat: no-repeat;
     
@@ -99,17 +99,21 @@ img {
     background-image: url(./imgs/ship.png);
     background-size: cover;
     background-repeat: no-repeat;
-    display: grid;
-    place-items: center;
 }
 .enemy {
-    background-color: red;
+    background-image: url(./imgs/enemy_ship_1.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .obstacle {
-    background-color: yellow;
+    background-image: url(./imgs/unknown3.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .creature {
-    background-color: purple;
+    background-image: url(./imgs/unknown3.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .modal {
