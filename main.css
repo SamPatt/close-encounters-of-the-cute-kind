@@ -45,9 +45,6 @@ img {
     height: 41vw;
 }
 
-#maze > div {
-
-}
 
 #photos {
     flex: 2;
@@ -100,7 +97,10 @@ img {
 
 .player {
     background-image: url(./imgs/ship.png);
-    transition: transform 0.3s ease;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: grid;
+    place-items: center;
 }
 .enemy {
     background-color: red;

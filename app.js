@@ -40,6 +40,8 @@ const speciesInstances = {};
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
+let shipDirection = '0deg'
+
 const player = {
     ...PLAYER_START,
     mazePosition: [...PLAYER_START.mazePosition]
@@ -68,12 +70,16 @@ document.addEventListener("keydown", keyBehavior);
 function keyBehavior(e) {
     e.preventDefault(); // The browser scrolling on keypress is annoying so this prevents it
   if (e.key === "ArrowUp") {
+    shipDirection = '270deg'
     movePlayer('up')
   } else if (e.key === "ArrowDown") {
+    shipDirection = '90deg'
     movePlayer('down')
   } else if (e.key === "ArrowRight") {
+    shipDirection = '0deg'
     movePlayer('right')
   } else if (e.key === "ArrowLeft") {
+    shipDirection = '180deg'
     movePlayer('left')
   }
 }
@@ -85,10 +91,8 @@ function keyBehavior(e) {
         // where to add in player position update and check if collisions with non-wall cells?
         // already in checkMazeMovement, could extend
 
-
 function movePlayer(direction){
     let desiredCell = getDesiredMoveCell(direction)
-    console.log(desiredCell)
     let desiredCellValue = maze[desiredCell[0]][desiredCell[1]]
     if(desiredCellValue === 1){
         return
@@ -109,11 +113,12 @@ function updateMazeAndPlayerPosition(desiredCell){
     maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
     player.mazePosition = desiredCell
     maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    render()
 }
 
 function moveOnPath(desiredCell){
     updateMazeAndPlayerPosition(desiredCell)
-    render()
+
 }
 
 function moveIntoEnemy(){
@@ -186,11 +191,15 @@ function triggerNextLevel(){
 
 
 
-function makeMazeDiv(classValue){
-    const divEl = document.createElement('div')
-    divEl.classList.add(GRID_CLASSES[classValue])
-    mazeEl.appendChild(divEl)
+function makeMazeDiv(classValue, isPlayer, direction) {
+    const divEl = document.createElement('div');
+    divEl.classList.add(GRID_CLASSES[classValue]);
+    if (isPlayer) {
+        divEl.style.transform = `rotate(${direction})`;
+    }
+    mazeEl.appendChild(divEl);
 }
+
 
 function randomNumber(max){
     return Math.floor(Math.random() * max);
@@ -263,7 +272,12 @@ function renderMaze(){
     mazeEl.innerHTML = ''
     for(row of maze){
         for(value of row){
+            if(value !== 2){
             makeMazeDiv(value)
+            } else {
+                makeMazeDiv(value, true, shipDirection);
+
+            }
         }
         
     }
@@ -284,6 +298,8 @@ function renderPhoto(name){
 
 function render(){
     renderMaze()
+ 
+
 }
 
 function init(){
@@ -297,12 +313,17 @@ init()
 
 /**TODO
  * Add obstacle photos and modal
- * Add creature photos and modal
+ * Add creature photos and modal - DONE
  * add obstacle mini-game
  * add in game over modal
  * create a reset
  * add sounds
- * 
+ * rotate ship on movement - DONE, hard!
+ * animation between cells
+ * enemy movement
+ * update walls so they look more uniform and less repetitive
+ * fog of war
+ * make obstacles and creatures unknown initially
  *  */ 
     
 
