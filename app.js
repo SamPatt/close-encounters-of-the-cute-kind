@@ -20,7 +20,11 @@ const PLAYER_START = {
     level: 1
 }
 
-const gridClasses = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
+const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
+
+const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
+
+const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_4.png']
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -40,8 +44,8 @@ const player = {
     mazePosition: [...PLAYER_START.mazePosition]
 }; // Sets the player object as a copy of the PLAYER_START object
 
-
-
+let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
+let speciesImages = [...SPECIES_IMAGES ]
 
 
 /*----- cached elements  -----*/
@@ -89,14 +93,16 @@ function movePlayer(direction){
     return
 }
 
-function moveOnPath(desiredCell){
+function updateMazeAndPlayerPosition(desiredCell){
     let cellMovedFrom = player.mazePosition
     maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
     player.mazePosition = desiredCell
     maze[player.mazePosition[0]][player.mazePosition[1]] = 2
-    // let desiredCellValue = maze[desiredCell[0]][desiredCell[1]]
-    render()
+}
 
+function moveOnPath(desiredCell){
+    updateMazeAndPlayerPosition(desiredCell)
+    render()
 }
 
 function moveIntoEnemy(){
@@ -106,18 +112,12 @@ function moveIntoEnemy(){
 }
 
 function moveIntoObstacle(desiredCell){
-    let cellMovedFrom = player.mazePosition
-    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
-    player.mazePosition = desiredCell
-    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    updateMazeAndPlayerPosition(desiredCell)
     obstacleCollision()
 }
 
 function moveIntoCreature(desiredCell){
-    let cellMovedFrom = player.mazePosition
-    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
-    player.mazePosition = desiredCell
-    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    updateMazeAndPlayerPosition(desiredCell)
     creatureCollision()
 }
 
@@ -159,13 +159,10 @@ function obstacleCollision(){
 
 function creatureCollision(){
     player.creaturesFound += 1
-
+    renderCreatureModal()
     render()
 }
 
-function updatePlayerPosition(){
-
-}
 
 function triggerGameOver(){
 
@@ -175,20 +172,31 @@ function triggerNextLevel(){
 
 }
 
-function updateMaze(){
-    
-}
 
 
 
 function makeMazeDiv(classValue){
     const divEl = document.createElement('div')
-    divEl.classList.add(gridClasses[classValue])
+    divEl.classList.add(GRID_CLASSES[classValue])
     mazeEl.appendChild(divEl)
 }
 
 function randomNumber(max){
     return Math.floor(Math.random() * max);
+}
+
+function renderCreatureModal(){
+    let randomNumSpeciesName = randomNumber(speciesNames.length)
+    let randomNumSpeciesImage = randomNumber(speciesImages.length)
+    let randomSpecies = speciesNames[randomNumSpeciesName]
+    let randomImage = speciesImages[randomNumSpeciesImage]
+    const congratsText = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
+    let randomCongratsText = congratsText[randomNumber(congratsText.length)]
+
+    speciesNames.splice(randomNumSpeciesName, 1)  // Removes the used species name so that it can't be duplicated later
+    speciesImages.splice(randomNumSpeciesImage, 1)
+    
+    showModal("You found a new species!", randomImage, `${randomCongratsText} You decide to name them: <h2>${randomSpecies}</h2>Well done! New species found: ${player.creaturesFound}`, 'creature');
 }
 
 function renderEnemyModal(){

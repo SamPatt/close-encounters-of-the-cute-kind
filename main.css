@@ -135,3 +135,24 @@ img {
 .hidden {
     display: none;
 }
+
+#creature-name-input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #555;
+    border-radius: 4px;
+    width: 70%;
+}
+
+#name-confirm-button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#name-confirm-button:hover {
+    background-color: #45a049;
+}
