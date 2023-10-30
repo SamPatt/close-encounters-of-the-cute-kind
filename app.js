@@ -20,6 +20,11 @@ const PLAYER_START = {
     level: 1
 }
 
+const player = {
+    ...PLAYER_START,
+    mazePosition: [...PLAYER_START.mazePosition]
+}; // Sets the player object as a copy of the PLAYER_START object
+
 const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature']
 
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
@@ -36,45 +41,139 @@ const STORYLINE = `
     stealing precious fuel cells. <b>Avoid other ships at all costs</b>.
 `;
 
-const encounters = {
+const ENCOUNTER_DESCRIPTIONS = {
     encounter1: {
         trigger: {
             title: 'Distress Beacon Detected!',
-            image: '/imgs/encounter1.png',
+            image: '/imgs/encounter_1.png',
             text: 'A faint signal calling for help... what do you do?',
             option1: 'Try to help',
             option2: 'Ignore their plea',
         },
         resolution1: {
-            title: 'Distress Beacon Detected!',
-            image: '/imgs/encounter1.png',
-            text: 'A faint signal calling for help... what do you do?',
-            option1: 'Try to help',
-            option2: 'Ignore their plea',
+            title: 'You saved them!',
+            image: '/imgs/encounter_1_resolution_1.png',
+            text: `You rescued them! They show their appreciation by giving you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+
         },
         resolution2: {
-            title: 'Distress Beacon Detected!',
-            image: '/imgs/encounter1.png',
-            text: 'A faint signal calling for help... what do you do?',
-            option1: 'Try to help',
-            option2: 'Ignore their plea',
+            title: `It's a trap!`,
+            image: '/imgs/encounter_1_resolution_2.png',
+            text: `You are ambushed! They steal one of your fuel cells. <br><br> Fuel cells: ${player.fuelCells}`,
         }
 
     },
+    
+    encounter2: {
+        trigger: {
+            title: 'Mysterious Space Anomaly!',
+            image: '/imgs/encounter_2.png',
+            text: 'An unknown cosmic event starts to form near you. Do you want to investigate?',
+            option1: 'Capture the event',
+            option2: 'Stay back',
+        },
+        resolution1: {
+            title: 'An Epic Capture!',
+            image: '/imgs/encounter_2_resolution_1.png',
+            text: `Your courage paid off! The photos are incredible. An alien ship admires your bravery and gifts you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+        },
+        resolution2: {
+            title: 'Space Turbulence!',
+            image: '/imgs/encounter_2_resolution_2.png',
+            text: `It was too risky! Your ship was damaged in the process. You consume a fuel cell for emergency repairs. <br><br> Fuel cells: ${player.fuelCells}`
+        }
+    },
+
+    encounter3: {
+        trigger: {
+            title: 'Lost Alien Creature!',
+            image: '/imgs/encounter_3.png',
+            text: 'A lost and cute alien creature drifts by. Do you want to help it?',
+            option1: 'Take it aboard',
+            option2: 'Leave it be',
+        },
+        resolution1: {
+            title: 'Reunited!',
+            image: '/imgs/encounter_3_resolution_1.png',
+            text: `You took it to its family! They reward you by showing a hidden creature's location on your map.`
+        },
+        resolution2: {
+            title: 'Missed Opportunity!',
+            image: '/imgs/encounter_3_resolution_2.png',
+            text: `It was a rare creature, and it had a map to its species. You missed a chance to photograph them. <br><br> Fuel cells: ${player.fuelCells}`
+        }
+    },
+
+    encounter4: {
+        trigger: {
+            title: 'Asteroid Field Ahead!',
+            image: '/imgs/encounter_4.png',
+            text: 'There might be hidden creatures in there. Will you venture in?',
+            option1: 'Navigate the field',
+            option2: 'Go around it',
+        },
+        resolution1: {
+            title: 'A Hidden Gem!',
+            image: '/imgs/encounter_4_resolution_1.png',
+            text: `You found a hidden colony of creatures and captured great photos! They gift you a fuel cell for not disturbing them. <br><br> Fuel cells: ${player.fuelCells}`
+        },
+        resolution2: {
+            title: 'A Close Call!',
+            image: '/imgs/encounter_4_resolution_2.png',
+            text: `Too many close collisions. You had to use a fuel cell to speed out of there. <br><br> Fuel cells: ${player.fuelCells}`
+        }
+    },
+
+    encounter5: {
+        trigger: {
+            title: 'Alien Ship in Distress!',
+            image: '/imgs/encounter_5.png',
+            text: 'They signal they have rare creatures aboard. Do you want to help?',
+            option1: 'Offer assistance',
+            option2: 'Avoid the ship',
+        },
+        resolution1: {
+            title: 'Friendship Forged!',
+            image: '/imgs/encounter_5_resolution_1.png',
+            text: `They let you photograph the creatures. In gratitude, they also gift you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+        },
+        resolution2: {
+            title: 'Lost in Space!',
+            image: '/imgs/encounter_5_resolution_2.png',
+            text: `The ship had rare species not found anywhere else. A missed opportunity for some great shots.`
+        }
+    },
+
+    encounter6: {
+        trigger: {
+            title: 'Space-Time Warp Detected!',
+            image: '/imgs/encounter_6.png',
+            text: 'A chance to photograph creatures from another time. Dare to enter?',
+            option1: 'Jump in',
+            option2: 'Stay in current time',
+        },
+        resolution1: {
+            title: 'Historic Moment!',
+            image: '/imgs/encounter_6_resolution_1.png',
+            text: `You captured creatures from eons ago! And found an ancient fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+        },
+        resolution2: {
+            title: 'Safe and Sound!',
+            image: '/imgs/encounter_6_resolution_2.png',
+            text: `You decided not to risk it.`
+        }
+    }
+    
 }
 
 const speciesInstances = {};
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
+let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
+console.log(encounters)
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
-
-const player = {
-    ...PLAYER_START,
-    mazePosition: [...PLAYER_START.mazePosition]
-}; // Sets the player object as a copy of the PLAYER_START object
-
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
 class Species {
@@ -195,9 +294,13 @@ function enemyCollision(){
 }
 
 
-
 function encounterTrigger(){
-    showModal("Oh no! Black hole!", "./imgs/obstacle_1.png", `You got too close to a black hole! You escape only by jettisoning a fuel cell. <br> -1 Fuel cell. Fuel cells remaining: ${player.fuelCells}`, 'encounterTrigger');
+    const numOfRemainingEncounters = Object.keys(encounters).length
+    const currentEncounter = encounters['encounter'+(randomNumber(numOfRemainingEncounters) + 1)]
+
+    // TODO - switch over all showModal to using objects
+        // For now just passing in one for encounters
+    showModal(currentEncounter.trigger.title, currentEncounter.trigger.image, currentEncounter.trigger.text, 'encounterTrigger', currentEncounter);
 }
 
 function creatureCollision(){
@@ -265,7 +368,7 @@ function renderEnemyModal(){
 }
 
 
-function showModal(title, imgSrc, description, type) {
+function showModal(title, imgSrc, description, type, currentEncounter) {
     isPlayerViewingModal = true
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-image').src = imgSrc;
@@ -280,15 +383,12 @@ function showModal(title, imgSrc, description, type) {
     document.getElementById('modal').addEventListener('click', handleModalClickOutside);
     // Additional logic based on type
     if (type === 'encounterTrigger') {
-        let option1 = "Try to move it";
-        let option2 = "Go around it";
-
         // Highlights first button option
         let currentSelectedOption = 'option1';
         document.getElementById(currentSelectedOption).classList.add('highlight'); 
 
-        document.getElementById('option1').textContent = option1;
-        document.getElementById('option2').textContent = option2;
+        document.getElementById('option1').textContent = currentEncounter.trigger.option1;
+        document.getElementById('option2').textContent = currentEncounter.trigger.option2;
         modalOptions.style.display = "block";
         // Remove existing event listeners to forces the player to chose an option and not dismiss modal
         document.removeEventListener('keydown', closeModal); 
