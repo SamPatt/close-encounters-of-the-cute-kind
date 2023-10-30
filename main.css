@@ -5,7 +5,7 @@
 
 body {
     font-family: 'Handjet', sans-serif;
-    font-size: 22px;
+    font-size: 24px;
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,6 +13,11 @@ body {
     height: 100vh; /* viewport height */
     background-color: rgb(0, 0, 0);
     color: rgb(229, 231, 230);
+}
+
+button {
+    font-family: 'Handjet', sans-serif;
+    font-size: 24px;
 }
 
 h1 {
@@ -105,7 +110,7 @@ img {
     background-size: cover;
     background-repeat: no-repeat;
 }
-.obstacle {
+.encounter {
     background-image: url(./imgs/unknown3.png);
     background-size: cover;
     background-repeat: no-repeat;
@@ -137,6 +142,26 @@ img {
     text-align: center;
 }
 
+.modal-option {
+    margin: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-option:hover {
+    background-color: #777;
+}
+
+
 .hidden {
     display: none;
+}
+
+.highlight {
+    background-color: #5a9258;
 }

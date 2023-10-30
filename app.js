@@ -20,7 +20,7 @@ const PLAYER_START = {
     level: 1
 }
 
-const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'obstacle', 'creature']
+const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature']
 
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
 
@@ -36,11 +36,39 @@ const STORYLINE = `
     stealing precious fuel cells. <b>Avoid other ships at all costs</b>.
 `;
 
+const encounters = {
+    encounter1: {
+        trigger: {
+            title: 'Distress Beacon Detected!',
+            image: '/imgs/encounter1.png',
+            text: 'A faint signal calling for help... what do you do?',
+            option1: 'Try to help',
+            option2: 'Ignore their plea',
+        },
+        resolution1: {
+            title: 'Distress Beacon Detected!',
+            image: '/imgs/encounter1.png',
+            text: 'A faint signal calling for help... what do you do?',
+            option1: 'Try to help',
+            option2: 'Ignore their plea',
+        },
+        resolution2: {
+            title: 'Distress Beacon Detected!',
+            image: '/imgs/encounter1.png',
+            text: 'A faint signal calling for help... what do you do?',
+            option1: 'Try to help',
+            option2: 'Ignore their plea',
+        }
+
+    },
+}
+
 const speciesInstances = {};
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
 let shipDirection = '0deg'
+let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
 
 const player = {
     ...PLAYER_START,
@@ -101,7 +129,7 @@ function movePlayer(direction){
     } else if(desiredCellValue === 3){
         moveIntoEnemy(desiredCell)
     } else if(desiredCellValue === 4){
-        moveIntoObstacle(desiredCell)
+        moveIntoEncounter(desiredCell)
     } else if(desiredCellValue === 5){
         moveIntoCreature(desiredCell)
     }
@@ -109,6 +137,9 @@ function movePlayer(direction){
 }
 
 function updateMazeAndPlayerPosition(desiredCell){
+    if(isPlayerViewingModal){
+        return
+    }
     let cellMovedFrom = player.mazePosition
     maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
     player.mazePosition = desiredCell
@@ -127,9 +158,9 @@ function moveIntoEnemy(){
     enemyCollision()
 }
 
-function moveIntoObstacle(desiredCell){
+function moveIntoEncounter(desiredCell){
     updateMazeAndPlayerPosition(desiredCell)
-    obstacleCollision()
+    encounterTrigger()
 }
 
 function moveIntoCreature(desiredCell){
@@ -165,12 +196,8 @@ function enemyCollision(){
 
 
 
-function obstacleCollision(){
-    // minigame asteroid destruction
-    // if player succeeds, clear obstacle and continue
-    // if fail, lose life
-        // if no fuelCells, triggerGameOver('obstacle')
-        render()
+function encounterTrigger(){
+    showModal("Oh no! Black hole!", "./imgs/obstacle_1.png", `You got too close to a black hole! You escape only by jettisoning a fuel cell. <br> -1 Fuel cell. Fuel cells remaining: ${player.fuelCells}`, 'encounterTrigger');
 }
 
 function creatureCollision(){
@@ -181,7 +208,7 @@ function creatureCollision(){
 
 
 function triggerGameOver(){
-    showModal('GAME OVER', './imgs/fuel3.png', `You ran out of fuel!`, 'gameOver');
+    showModal('GAME OVER', './imgs/fuel3.png', `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}`, 'gameOver');
 }
 
 function triggerNextLevel(){
@@ -203,6 +230,11 @@ function makeMazeDiv(classValue, isPlayer, direction) {
 
 function randomNumber(max){
     return Math.floor(Math.random() * max);
+}
+
+function encounterResolution(){
+    closeModal()
+    showModal("resolution", "./imgs/obstacle_1.png", `+1 Fuel cell. Fuel cells remaining: ${player.fuelCells}`, 'encounterResolution');
 }
 
 function renderCreatureModal(){
@@ -234,26 +266,61 @@ function renderEnemyModal(){
 
 
 function showModal(title, imgSrc, description, type) {
+    isPlayerViewingModal = true
     document.getElementById('modal-title').textContent = title;
     document.getElementById('modal-image').src = imgSrc;
     document.getElementById('modal-description').innerHTML = description;
+    let modalOptions = document.getElementById('modal-options');
 
-    // Additional logic based on type
-    if (type === 'enemy') {
-        // enemy-specific logic
-    } else if (type === 'intro') {
-    }
-    //... handle other types similarly
-
+    
     document.getElementById('modal').classList.remove('hidden');
-
+    
     // Add event listeners to close modal
     document.addEventListener('keydown', closeModal);
     document.getElementById('modal').addEventListener('click', handleModalClickOutside);
+    // Additional logic based on type
+    if (type === 'encounterTrigger') {
+        let option1 = "Try to move it";
+        let option2 = "Go around it";
+
+        // Highlights first button option
+        let currentSelectedOption = 'option1';
+        document.getElementById(currentSelectedOption).classList.add('highlight'); 
+
+        document.getElementById('option1').textContent = option1;
+        document.getElementById('option2').textContent = option2;
+        modalOptions.style.display = "block";
+        // Remove existing event listeners to forces the player to chose an option and not dismiss modal
+        document.removeEventListener('keydown', closeModal); 
+        document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+        // Add event listeners to check for encounter buttons
+        document.getElementById('option1').addEventListener('click', function(){
+            encounterResolution('option1')
+        } );
+        document.getElementById('option2').addEventListener('click', function(){
+            encounterResolution('option2')
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+                // Toggle the selected option
+                document.getElementById(currentSelectedOption).classList.remove('highlight'); 
+                currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
+                document.getElementById(currentSelectedOption).classList.add('highlight'); 
+            } else if (e.key === "Enter" || e.key === " ") {
+                // Trigger the selected option's click event
+                document.getElementById(currentSelectedOption).click();
+            }
+        });
+        
+    } else {
+        modalOptions.style.display = "none";
+    }
+    //... handle other types similarly
 }
 
 
 function closeModal() {
+    isPlayerViewingModal = false
     document.getElementById('modal').classList.add('hidden');
     // TODO: add in a fuel cell check and the gameover call here  so that it won't interrupt other modals
     render();
@@ -315,10 +382,10 @@ init()
 
 
 /**TODO
- * Add obstacle photos and modal
+ * Add encounter photos and modal
  * Add creature photos and modal - DONE
- * add obstacle mini-game
- * add in game over modal
+ * add encounter mini-game
+ * add in game over modal - DONE
  * create a reset
  * add sounds
  * rotate ship on movement - DONE, hard!
@@ -326,7 +393,7 @@ init()
  * enemy movement
  * update walls so they look more uniform and less repetitive
  * fog of war
- * make obstacles and creatures unknown initially
+ * make encounters and creatures unknown initially - DONE
  *  */ 
     
 
