@@ -37,132 +37,134 @@ const STORYLINE = `
     You're just launching your career as an space wildlife photographer, and you have a plan: find the 
     cutest creatures in the galaxy and share them with the world! <br><br>
 
-    But beware: there aren't any laws in deep space, and many "Starstreamers" are notorious for 
-    stealing precious fuel cells. <b>Avoid other ships at all costs</b>.
+    <b>But beware:</b> space is lawless, and if you aren't careful, your precious fuel cells will be stolen!
 `;
 
 const ENCOUNTER_DESCRIPTIONS = {
     encounter1: {
         trigger: {
-            title: 'Distress Beacon Detected!',
-            image: '/imgs/encounter_1.png',
-            text: 'A faint signal calling for help... what do you do?',
-            option1: 'Try to help',
-            option2: 'Ignore their plea',
+            title: `Mysterious Signal Echoes!`,
+            image: `/imgs/encounter_1.png`,
+            text: `Amid the silent void, your ship's radar detects a faint distress signal, pulsating from a distant derelict ship. The eerie silence is broken only by this beacon. Do you dare approach?`,
+            option1: `Venture forth and investigate`,
+            option2: `Steer clear; it could be a ruse`,
         },
         resolution1: {
-            title: 'You saved them!',
-            image: '/imgs/encounter_1_resolution_1.png',
-            text: `You rescued them! They show their appreciation by giving you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
-
+            title: `A Grateful Traveler!`,
+            image: `/imgs/encounter_1_resolution_1.png`,
+            text: `Navigating through the wreckage, you discover a stranded traveler. His ship was attacked by space pirates, and he's been floating aimlessly ever since. Grateful for the timely rescue, he gifts you a fuel cell, a relic from his now-defunct ship. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: `It's a trap!`,
-            image: '/imgs/encounter_1_resolution_2.png',
-            text: `You are ambushed! They steal one of your fuel cells. <br><br> Fuel cells: ${player.fuelCells}`,
+            title: `Cosmic Deception!`,
+            image: `/imgs/encounter_1_resolution_2.png`,
+            text: `Your instincts were right! As you steer clear of the signal, you notice rogue spacecrafts lurking nearby. It was indeed a trap!`
         }
-
     },
     
     encounter2: {
         trigger: {
-            title: 'Mysterious Space Anomaly!',
-            image: '/imgs/encounter_2.png',
-            text: 'An unknown cosmic event starts to form near you. Do you want to investigate?',
-            option1: 'Capture the event',
-            option2: 'Stay back',
+            title: `Cosmic Phenomenon Emerges!`,
+            image: `/imgs/encounter_2.png`,
+            text: `A mesmerizing and radiant interstellar event begins to manifest before your eyes, its origin and nature unknown. The beauty and mystery beckon. Do you seize the moment?`,
+            option1: `Dive in and document!`,
+            option2: `Exercise caution; maintain distance`,
         },
         resolution1: {
-            title: 'An Epic Capture!',
-            image: '/imgs/encounter_2_resolution_1.png',
-            text: `Your courage paid off! The photos are incredible. An alien ship admires your bravery and gifts you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Stellar Photography!`,
+            image: `/imgs/encounter_2_resolution_1.png`,
+            text: `You navigate your ship closer, capturing breathtaking images of the phenomenon. Nearby, an alien reconnaissance vessel, captivated by your audacity, approaches in peace. Impressed by your images and courage, they reward you with a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: 'Space Turbulence!',
-            image: '/imgs/encounter_2_resolution_2.png',
-            text: `It was too risky! Your ship was damaged in the process. You consume a fuel cell for emergency repairs. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `A Near Miss!`,
+            image: `/imgs/encounter_2_resolution_2.png`,
+            text: `Exercising prudence, you decide to keep your distance. However, the vast energies from the event create unpredictable spatial waves. A sudden jolt of turbulence rocks your ship, causing minor damage. You quickly utilize a fuel cell to power up the emergency repair systems, restoring stability. <br><br> Fuel cells: ${player.fuelCells}`
         }
     },
+    
 
     encounter3: {
         trigger: {
-            title: 'Lost Alien Creature!',
-            image: '/imgs/encounter_3.png',
-            text: 'A lost and cute alien creature drifts by. Do you want to help it?',
-            option1: 'Take it aboard',
-            option2: 'Leave it be',
+            title: `Ethereal Nebula Sighting!`,
+            image: `/imgs/encounter_3.png`,
+            text: `The vastness of space reveals a captivating nebula, shimmering with a myriad of colors and teeming with undiscovered lifeforms. Your sensors detect unusual bio-signatures. Could this be the moment you've been waiting for?`,
+            option1: `Venture closer for a rare photo opportunity`,
+            option2: `Chart its coordinates but keep a safe distance`,
         },
         resolution1: {
-            title: 'Reunited!',
-            image: '/imgs/encounter_3_resolution_1.png',
-            text: `You took it to its family! They reward you by showing a hidden creature's location on your map.`
+            title: `Space Wildlife Extravaganza!`,
+            image: `/imgs/encounter_3_resolution_1.png`,
+            text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: 'Missed Opportunity!',
-            image: '/imgs/encounter_3_resolution_2.png',
-            text: `It was a rare creature, and it had a map to its species. You missed a chance to photograph them. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Safety First!`,
+            image: `/imgs/encounter_3_resolution_2.png`,
+            text: `Recognizing the potential dangers of unknown territories, you log the nebula's coordinates for future reference and continue on your journey.`
         }
     },
+    
 
     encounter4: {
         trigger: {
-            title: 'Asteroid Field Ahead!',
-            image: '/imgs/encounter_4.png',
-            text: 'There might be hidden creatures in there. Will you venture in?',
-            option1: 'Navigate the field',
-            option2: 'Go around it',
+            title: `Mysterious Merchant's Offer!`,
+            image: `/imgs/encounter_4.png`,
+            text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for one fuel cell. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
+            option1: `Trade a fuel cell for the weapon`,
+            option2: `Politely decline and save your fuel`,
         },
         resolution1: {
-            title: 'A Hidden Gem!',
-            image: '/imgs/encounter_4_resolution_1.png',
-            text: `You found a hidden colony of creatures and captured great photos! They gift you a fuel cell for not disturbing them. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Galactic Armament Acquired!`,
+            image: `/imgs/encounter_4_resolution_1.png`,
+            text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: 'A Close Call!',
-            image: '/imgs/encounter_4_resolution_2.png',
-            text: `Too many close collisions. You had to use a fuel cell to speed out of there. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Trust in Preparedness!`,
+            image: `/imgs/encounter_4_resolution_2.png`,
+            text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
         }
-    },
+    }
+    ,
 
     encounter5: {
         trigger: {
-            title: 'Alien Ship in Distress!',
-            image: '/imgs/encounter_5.png',
-            text: 'They signal they have rare creatures aboard. Do you want to help?',
-            option1: 'Offer assistance',
-            option2: 'Avoid the ship',
+            title: `The Inescapable Grasp of a Black Hole!`,
+            image: `/imgs/encounter_5.png`,
+            text: `The serenity of space is abruptly disrupted as your ship's alarms blare. You've unknowingly ventured too close to a black hole! Its gravitational pull is immense, and escape seems improbable. Your ship's AI suggests jettisoning a fuel cell to generate a massive thrust. The choice is yours.`,
+            option1: `Jettison a fuel cell to aid escape`,
+            option2: `Attempt to escape without sacrificing fuel`,
         },
         resolution1: {
-            title: 'Friendship Forged!',
-            image: '/imgs/encounter_5_resolution_1.png',
-            text: `They let you photograph the creatures. In gratitude, they also gift you a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Desperate Measures, Successful Escape!`,
+            image: `/imgs/encounter_5_resolution_1.png`,
+            text: `You make the tough call and jettison a fuel cell. The resulting explosion provides the necessary thrust, propelling your ship out of the black hole's formidable grasp. You're safe, albeit with one less fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: 'Lost in Space!',
-            image: '/imgs/encounter_5_resolution_2.png',
-            text: `The ship had rare species not found anywhere else. A missed opportunity for some great shots.`
+            title: `Gravitational Struggle!`,
+            image: `/imgs/encounter_5_resolution_2.png`,
+            text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells. <br><br> Fuel cells: ${player.fuelCells}`
         }
-    },
+    }
+    ,
 
     encounter6: {
         trigger: {
-            title: 'Space-Time Warp Detected!',
-            image: '/imgs/encounter_6.png',
-            text: 'A chance to photograph creatures from another time. Dare to enter?',
-            option1: 'Jump in',
-            option2: 'Stay in current time',
+            title: `A Welcoming Space Station!`,
+            image: `/imgs/encounter_6.png`,
+            text: `As you traverse the vastness of space, a friendly transmission is received from a nearby space station. The station's commander invites you aboard for a short respite and mentions they have a busy cantina where wagers are made.`,
+            option1: `Dock, rest, and trade for a fuel cell`,
+            option2: `Visit the cantina and make a wager`,
         },
         resolution1: {
-            title: 'Historic Moment!',
-            image: '/imgs/encounter_6_resolution_1.png',
-            text: `You captured creatures from eons ago! And found an ancient fuel cell. <br><br> Fuel cells: ${player.fuelCells}`
+            title: `Successful Trade!`,
+            image: `/imgs/encounter_6_resolution_1.png`,
+            text: `You decide to dock and are warmly greeted by the inhabitants of the space station. After sharing stories of your adventures, you make a fair trade and secure a fuel cell. The station's inhabitants wish you well on your journey. <br><br> Fuel cells: ${player.fuelCells}`
         },
         resolution2: {
-            title: 'Safe and Sound!',
-            image: '/imgs/encounter_6_resolution_2.png',
-            text: `You decided not to risk it.`
+            title: `Space Challenges Conquered!`,
+            image: `/imgs/encounter_6_resolution_2.png`,
+            text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!<br><br> Fuel cells: ${player.fuelCells}`
         }
     }
+    
     
 }
 
@@ -212,11 +214,6 @@ function keyBehavior(e) {
 }
 
 /*----- functions -----*/
-
-// TODO: Determine the flow for updating map / triggering actions after movement
-    // event listener calls movePlayer, which calls checkMazeMovement to check for a valid move
-        // where to add in player position update and check if collisions with non-wall cells?
-        // already in checkMazeMovement, could extend
 
 function movePlayer(direction){
     let desiredCell = getDesiredMoveCell(direction)
@@ -289,7 +286,7 @@ function enemyCollision(){
     } else {
         renderEnemyModal()
     }
-    player.mazePosition = PLAYER_START.mazePosition
+    // player.mazePosition = PLAYER_START.mazePosition
     maze[player.mazePosition[0]][player.mazePosition[1]] = 2
 }
 
@@ -335,9 +332,12 @@ function randomNumber(max){
     return Math.floor(Math.random() * max);
 }
 
-function encounterResolution(){
+function encounterResolution(currentEncounter, selectedOption){
     closeModal()
-    showModal("resolution", "./imgs/obstacle_1.png", `+1 Fuel cell. Fuel cells remaining: ${player.fuelCells}`, 'encounterResolution');
+    const currentResolution = currentEncounter['resolution'+selectedOption]
+    console.log(currentResolution)
+
+    showModal(currentResolution.title, currentResolution.image, currentResolution.text, 'encounterResolution');
 }
 
 function renderCreatureModal(){
@@ -395,10 +395,10 @@ function showModal(title, imgSrc, description, type, currentEncounter) {
         document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
         // Add event listeners to check for encounter buttons
         document.getElementById('option1').addEventListener('click', function(){
-            encounterResolution('option1')
+            encounterResolution(currentEncounter, 1)
         } );
         document.getElementById('option2').addEventListener('click', function(){
-            encounterResolution('option2')
+            encounterResolution(currentEncounter, 2)
         });
         document.addEventListener('keydown', function(e) {
             if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
@@ -412,8 +412,18 @@ function showModal(title, imgSrc, description, type, currentEncounter) {
             }
         });
         
+    } else if (type === 'encounterResolution') {
+        modalOptions.style.display = "none";
+        document.getElementById('option1').removeEventListener('click', function(){
+            encounterResolution(currentEncounter, 1)
+        } );
+        document.getElementById('option2').removeEventListener('click', function(){
+            encounterResolution(currentEncounter, 2)
+        });
+
     } else {
         modalOptions.style.display = "none";
+
     }
     //... handle other types similarly
 }
