@@ -4,11 +4,11 @@ console.log('We are here!')
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 4, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 4, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
+    [1, 4, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 4, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
+    [1, 4, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
     [1, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
@@ -97,14 +97,14 @@ const ENCOUNTER_DESCRIPTIONS = {
             option2: `Chart its coordinates but keep a safe distance`,
         },
         resolution1: {
-            title: `Space Wildlife Extravaganza!`,
+            title: `Bad photo op!`,
             image: `/imgs/encounter_3_resolution_1.png`,
             text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed. <br><br> Fuel cells: ${player.fuelCells}`,
             outcome: 'lose1'
         },
         resolution2: {
             title: `Safety First!`,
-            image: `/imgs/encounter_3_resolution_2.png`,
+            image: `/imgs/encounter_3.png`,
             text: `Recognizing the potential dangers of unknown territories, you log the nebula's coordinates for future reference and continue on your journey.`,
             outcome: ''
 
@@ -151,7 +151,7 @@ const ENCOUNTER_DESCRIPTIONS = {
         },
         resolution2: {
             title: `Gravitational Struggle!`,
-            image: `/imgs/encounter_5_resolution_2.png`,
+            image: `/imgs/obstacle_1.png`,
             text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells. <br><br> Fuel cells: ${player.fuelCells}`,
             outcome: 'lose2'
         }
@@ -173,7 +173,7 @@ const ENCOUNTER_DESCRIPTIONS = {
             outcome: 'gain1'
         },
         resolution2: {
-            title: `Space Challenges Conquered!`,
+            title: `A good wager!`,
             image: `/imgs/encounter_6_resolution_2.png`,
             text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!<br><br> Fuel cells: ${player.fuelCells}`,
             outcome: 'gain2'
@@ -232,6 +232,9 @@ function keyBehavior(e) {
 /*----- functions -----*/
 
 function movePlayer(direction){
+    if(isPlayerViewingModal){
+        return
+    }
     let desiredCell = getDesiredMoveCell(direction)
     let desiredCellValue = maze[desiredCell[0]][desiredCell[1]]
     if(desiredCellValue === 1){
@@ -249,9 +252,6 @@ function movePlayer(direction){
 }
 
 function updateMazeAndPlayerPosition(desiredCell){
-    if(isPlayerViewingModal){
-        return
-    }
     let cellMovedFrom = player.mazePosition
     maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
     player.mazePosition = desiredCell
@@ -295,9 +295,12 @@ function getDesiredMoveCell(directionOfMove) {
 }
 
 function enemyCollision(){
-    player.fuelCells -= 1
+    if(!player.hasWeapon){
+        player.fuelCells -= 1
+    }
+    
     console.log(player.fuelCells)
-    if(player.fuelCells < 0){
+    if(player.fuelCells < 1){
         triggerGameOver('enemy')
     } else {
         renderEnemyModal()
@@ -308,11 +311,13 @@ function enemyCollision(){
 
 
 function encounterTrigger(){
+    console.log('encounter collision')
     const numOfRemainingEncounters = Object.keys(encounters).length
     const currentEncounter = encounters['encounter'+(randomNumber(numOfRemainingEncounters) + 1)]
 
     // TODO - switch over all showModal to using objects
         // For now just passing in one for encounters
+        console.log('launching first encounter modal with encounterTrigger')
     showModal(currentEncounter.trigger.title, currentEncounter.trigger.image, currentEncounter.trigger.text, 'encounterTrigger', currentEncounter);
 }
 
@@ -349,7 +354,7 @@ function randomNumber(max){
 }
 
 function encounterResolution(currentEncounter, selectedOption){
-    closeModal()
+    // closeModal()
     const currentResolution = currentEncounter['resolution'+selectedOption]
     let outcome = currentResolution.outcome
     console.log(outcome)
@@ -369,7 +374,8 @@ function encounterResolution(currentEncounter, selectedOption){
     } else {
         console.log('no change')
     }
-
+    delete encounters[currentEncounter]
+    
     showModal(currentResolution.title, currentResolution.image, currentResolution.text, 'encounterResolution');
 }
 
@@ -412,17 +418,17 @@ function showModal(title, imgSrc, description, type, currentEncounter) {
     document.getElementById('modal-description').innerHTML = description;
     let modalOptions = document.getElementById('modal-options');
 
-    
-    document.getElementById('modal').classList.remove('hidden');
-    
-    // Add event listeners to close modal
     document.addEventListener('keydown', closeModal);
     document.getElementById('modal').addEventListener('click', handleModalClickOutside);
+    document.getElementById('modal').classList.remove('hidden');
+    
+
     // Additional logic based on type
     if (type === 'encounterTrigger') {
         // Highlights first button option
         let currentSelectedOption = 'option1';
         document.getElementById(currentSelectedOption).classList.add('highlight'); 
+        
 
         document.getElementById('option1').textContent = currentEncounter.trigger.option1;
         document.getElementById('option2').textContent = currentEncounter.trigger.option2;
@@ -437,7 +443,8 @@ function showModal(title, imgSrc, description, type, currentEncounter) {
         document.getElementById('option2').addEventListener('click', function(){
             encounterResolution(currentEncounter, 2)
         });
-        document.addEventListener('keydown', function(e) {
+        modalOptions.focus()
+        modalOptions.addEventListener('keydown', function(e) {
             if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
                 // Toggle the selected option
                 document.getElementById(currentSelectedOption).classList.remove('highlight'); 
@@ -451,14 +458,13 @@ function showModal(title, imgSrc, description, type, currentEncounter) {
         
     } else if (type === 'encounterResolution') {
         modalOptions.style.display = "none";
-        document.getElementById('option1').removeEventListener('click', function(){
-            encounterResolution(currentEncounter, 1)
-        } );
-        document.getElementById('option2').removeEventListener('click', function(){
-            encounterResolution(currentEncounter, 2)
-        });
 
-    } else {
+
+        } else if(type === 'intro'){
+            // Add event listeners to close modal
+    modalOptions.style.display = "none";
+    }
+    else {
         modalOptions.style.display = "none";
 
     }
@@ -474,7 +480,8 @@ function closeModal() {
 
     // Remove the event listeners
     
-    document.removeEventListener('keydown', closeModal);
+    let modalOptions = document.getElementById('modal-options');
+    modalOptions.removeEventListener('keydown', handleKeydown);
     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
 
 }
@@ -529,11 +536,12 @@ init()
 
 
 /**TODO
- * Add encounter photos and modal
+ * Add encounter photos and modal - DONE
  * Add creature photos and modal - DONE
- * add encounter mini-game
  * add in game over modal - DONE
  * create a reset
+ * add new level
+ * add all encounter images
  * add sounds
  * rotate ship on movement - DONE, hard!
  * animation between cells
@@ -541,6 +549,8 @@ init()
  * update walls so they look more uniform and less repetitive
  * fog of war
  * make encounters and creatures unknown initially - DONE
+ * refactor to use two separate modals to fix event listener hell
+ * fix deletion of encounters
  *  */ 
     
 
