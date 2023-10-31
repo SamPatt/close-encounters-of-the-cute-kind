@@ -4,11 +4,11 @@ console.log('We are here!')
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
-    [1, 5, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 4, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
-    [1, 4, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 4, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
-    [1, 4, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 3, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
+    [1, 0, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
     [1, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
@@ -21,7 +21,7 @@ const PLAYER_START = {
     hasWeapon: false
 }
 
-const player = {
+let player = {
     ...PLAYER_START,
     mazePosition: [...PLAYER_START.mazePosition]
 }; // Sets the player object as a copy of the PLAYER_START object
@@ -33,6 +33,8 @@ const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluf
 const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_5.png', './imgs/species_4.png', './imgs/species_6.png']
 
 const SPECIES_CONGRATS_TEXT = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
+
+const RESTART_DELAY = 10000; 
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -185,8 +187,7 @@ const ENCOUNTER_DESCRIPTIONS = {
     
     
 }
-
-const speciesInstances = {};
+let speciesInstances = {};
 
 /*----- state variables -----*/
 let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
@@ -196,6 +197,7 @@ let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
 let currentSelectedOption = 'option1';
 let encounterToRemove = null;
+let isGameOver = false
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
 let speciesCongratsText = [...SPECIES_CONGRATS_TEXT]
@@ -305,12 +307,17 @@ function getDesiredMoveCell(directionOfMove) {
 
 function enemyCollision(){
     if(!player.hasWeapon){
-        player.fuelCells -= 1
+        changeFuel(-1)
     }
     
     console.log(player.fuelCells)
     if(player.fuelCells < 1){
-        triggerGameOver('enemy')
+        console.log('ran into enemy and out of fuel')
+        if(!isGameOver){
+            triggerGameOver('enemy')
+        } else {
+            console.log('game is already over')
+        }
     } else {
         renderEnemyModal()
     }
@@ -342,13 +349,34 @@ function creatureCollision(){
 
 
 function triggerGameOver(){
-    showModal('GAME OVER', './imgs/fuel3.png', `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}`, 'gameOver');
+    isGameOver = true
+    player.mazePosition = PLAYER_START.mazePosition
+    console.log('triggergameover')
+    const obj = {
+        title: 'GAME OVER',
+        img: './imgs/fuel3.png',
+        text: `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}<br><br> Restarting in <b><span id="countdown">10</span></b> seconds...`,
+    }
+    showDisplayModal('gameOver', obj);
+
+    // Start the countdown
+    restartGameAfterDelay();
 }
 
-function triggerNextLevel(){
+function restartGameAfterDelay(){
+    let timeLeft = RESTART_DELAY / 1000;
+    countdownInterval = setInterval(function() {
+        console.log('countdown begun')
+        timeLeft -= 1;
+        document.getElementById('countdown').innerText = timeLeft;
 
+        if(timeLeft <= 0) {
+            console.log('countdown ended')
+            clearInterval(countdownInterval); 
+            restartGame();
+        }
+    }, 1000); // Update every second
 }
-
 
 
 
@@ -368,28 +396,25 @@ function randomNumber(max){
 
 function encounterResolution(currentEncounter, selectedOption){
     closeModal('choices-modal')
-    console.log('encounterResolution called')
+    currentSelectedOption = 'option1' // resets this for the new choices modal display
     const currentResolution = currentEncounter['resolution'+selectedOption]
     let outcome = currentResolution.outcome
+    console.log('outcome = ' + outcome)
     if(outcome){
         if(outcome === 'gain1'){
-            player.fuelCells ++
-            console.log(`fuel cells: ${player.fuelCells}`)
+            changeFuel(1)
         } else if (outcome === 'gain2'){
-            player.fuelCells += 2
-            console.log(`fuel cells: ${player.fuelCells}`)
+            changeFuel(2)
         } else if (outcome === 'lose1'){
-            player.fuelCells --
-            console.log(`fuel cells: ${player.fuelCells}`)
+            changeFuel(-1)
         } else if (outcome === 'lose2'){
-            player.fuelCells -= 2
-            console.log(`fuel cells: ${player.fuelCells}`)
+            changeFuel(-2)
         } else if (outcome === 'lose1AndGainWeapon'){
-            player.fuelCells --
-            console.log(`fuel cells: ${player.fuelCells}`)
+            changeFuel(-1)
             player.hasWeapon = true
         }
     } else {
+        console.log('no change')
     }
     delete encounters[encounterToRemove]
     showDisplayModal('encounterResolution', currentResolution);
@@ -422,10 +447,21 @@ function renderEnemyModal(){
     const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"You're just wasting fuel out here, loser."`, `"Oh good, fresh content."`, `"I know it's wrong but ... meh, I don't really care."` ]
     let randomImage = enemyImages[randomNumber(enemyImages.length)]
     let randomText = enemyText[randomNumber(enemyText.length)]
+    const enemyObj = {
+        title: 'Another ship attacked you!',
+        image: randomImage,
+        text: `${randomText}. <br><br> They stole a fuel cell!`
+    }
+    const weaponObj = {
+        title: 'Weapons test',
+        image: './imgs/weapon.png',
+        text: `You're not going down without a fight. You line up your weapon and fire: It's a hit! The enemy ship flees.`
+    }
+
     if(player.hasWeapon){
-        showModal('Weapons test', './imgs/weapon.png', `You're not going down without a fight. You line up your weapon and fire: It's a hit! The enemy ship flees.`, 'enemy');
+        showDisplayModal('enemy', weaponObj);
     } else {
-    showModal('Another ship attacked you!', randomImage, `${randomText} <br><br>-1 Fuel cells. Fuel Cells remaining: ${player.fuelCells}`, 'enemy');
+    showDisplayModal('enemy', enemyObj);
     }
     
 }
@@ -473,14 +509,15 @@ function showDisplayModal(type, currentEncounter) {
     let modalImageEl = document.getElementById('display-modal-image');
     let modalDescriptionEl = document.getElementById('display-modal-description');
     
-    // Adding event listeners to exit modal
-    document.addEventListener('keydown', closeDisplayModal);
+    // Adding event listeners to exit modal only if game is still running
+    if(!isGameOver){
+        document.addEventListener('keydown', closeDisplayModal);
+        document.getElementById('display-modal').addEventListener('click', closeDisplayModal)
+    }
     
-    document.getElementById('display-modal').addEventListener('click', closeDisplayModal)
 
     // Show modal
     document.getElementById('display-modal').classList.remove('hidden');
-    console.log(currentEncounter)
     
     // Conditionals
     if(type === 'intro'){
@@ -488,7 +525,6 @@ function showDisplayModal(type, currentEncounter) {
         modalImageEl.src = "./imgs/hero2.png"
         modalDescriptionEl.innerHTML = STORYLINE
     } else if (type === 'encounterResolution'){
-        console.log('encounter resolution: ', currentEncounter)
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
         modalDescriptionEl.innerHTML = currentEncounter.text
@@ -496,11 +532,19 @@ function showDisplayModal(type, currentEncounter) {
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
         modalDescriptionEl.innerHTML = currentEncounter.text
+    } else if (type === 'gameOver'){
+        modalTitleEl.innerText = currentEncounter.title
+        modalImageEl.src = currentEncounter.img
+        modalDescriptionEl.innerHTML = currentEncounter.text
+    } else if (type === 'enemy'){
+        modalTitleEl.innerText = currentEncounter.title
+        modalImageEl.src = currentEncounter.image
+        modalDescriptionEl.innerHTML = currentEncounter.text
     }
 }
 
 function handleChoicesKeypress(e) {
-    console.log(document.getElementById(currentSelectedOption))
+    
     if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
         // Toggle the selected option
         document.getElementById(currentSelectedOption).classList.remove('highlight'); 
@@ -510,6 +554,7 @@ function handleChoicesKeypress(e) {
         // Trigger the selected option's click event
         document.getElementById(currentSelectedOption).click();
     }
+    console.log(document.getElementById(currentSelectedOption))
 }
 
 function closeDisplayModal(e) {
@@ -533,23 +578,34 @@ function handleModalClickOutside(elId, event) {
     }
 }
 
+function changeFuel(amount){
+    player.fuelCells += amount; 
+    if(player.fuelCells <= 0){
+        if(!isGameOver){
+            triggerGameOver();
+        } else {
+            console.log('game is already over')
+        }
+    } else {
+        fuelRender();
+    }
+}
+
 function fuelRender(){
     fuelContainerEl1.innerHTML = ''
     fuelContainerEl2.innerHTML = ''
     console.log(player.fuelCells)
-    if(player.fuelCells <= 0){
-        triggerGameOver()
-    } else {
-        for(let i = 0; i < player.fuelCells; i++){
-            let imgEl1 = document.createElement('img');
-            let imgEl2 = document.createElement('img');
-            imgEl1.src = "./imgs/fuel_small.png";
-            imgEl2.src = "./imgs/fuel_small.png";
-            fuelContainerEl1.appendChild(imgEl1);
-            fuelContainerEl2.appendChild(imgEl2);
-        }
+
+    for(let i = 0; i < player.fuelCells; i++){
+        let imgEl1 = document.createElement('img');
+        let imgEl2 = document.createElement('img');
+        imgEl1.src = "./imgs/fuel_small.png";
+        imgEl2.src = "./imgs/fuel_small.png";
+        fuelContainerEl1.appendChild(imgEl1);
+        fuelContainerEl2.appendChild(imgEl2);
+    }
 }
-}
+
 
 function renderMaze(){
     mazeEl.innerHTML = ''
@@ -579,6 +635,37 @@ function renderPhoto(name){
     }
 }
 
+function restartGame(){
+    // Logic to restart the game
+    speciesPhotoTopEl.src = "./imgs/blankphoto.png"
+    speciesPhotoBottomEl.src = "./imgs/blankphoto.png"
+    speciesDescriptionTopEl.innerText = 'Species: Undiscovered. No entry in photo archives'
+    speciesDescriptionBottomEl.innerText = 'Species: Undiscovered. No entry in photo archives'
+    document.getElementById('display-modal').classList.add('hidden'); // Hide the game over modal
+    
+    console.log('restart')
+    maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
+    shipDirection = '0deg'
+    isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
+    currentSelectedOption = 'option1';
+    encounterToRemove = null; 
+    speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
+    speciesImages = [...SPECIES_IMAGES ]
+    speciesCongratsText = [...SPECIES_CONGRATS_TEXT]
+    speciesInstances = {};
+    isGameOver = false
+    player = {
+        ...PLAYER_START,
+        mazePosition: [...PLAYER_START.mazePosition]
+    };
+    init()
+
+}
+function triggerNextLevel(){
+
+}
+
+
 function render(){
     renderMaze()
  
@@ -586,6 +673,8 @@ function render(){
 }
 
 function init(){
+
+    render()
     showDisplayModal('intro');
 }
 
