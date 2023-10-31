@@ -192,6 +192,7 @@ let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies e
 console.log(encounters)
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
+let currentSelectedOption = 'option1';
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
 class Species {
@@ -318,7 +319,7 @@ function encounterTrigger(){
     // TODO - switch over all showModal to using objects
         // For now just passing in one for encounters
         console.log('launching first encounter modal with encounterTrigger')
-    showModal(currentEncounter.trigger.title, currentEncounter.trigger.image, currentEncounter.trigger.text, 'encounterTrigger', currentEncounter);
+    showChoicesModal('encounterTrigger', currentEncounter);
 }
 
 function creatureCollision(){
@@ -354,7 +355,7 @@ function randomNumber(max){
 }
 
 function encounterResolution(currentEncounter, selectedOption){
-    // closeModal()
+    closeModal('choices-modal')
     const currentResolution = currentEncounter['resolution'+selectedOption]
     let outcome = currentResolution.outcome
     console.log(outcome)
@@ -376,7 +377,7 @@ function encounterResolution(currentEncounter, selectedOption){
     }
     delete encounters[currentEncounter]
     
-    showModal(currentResolution.title, currentResolution.image, currentResolution.text, 'encounterResolution');
+    showDisplayModal('encounterResolution', currentResolution);
 }
 
 function renderCreatureModal(){
@@ -410,23 +411,52 @@ function renderEnemyModal(){
     
 }
 
+function showChoicesModal(type, currentEncounter) {
+    isPlayerViewingModal = true
+    document.getElementById('option1').classList.add('highlight');
+    document.getElementById('option2').classList.remove('highlight');
+    // Caching elements
+    let modalTitleEl = document.getElementById('choices-modal-title');
+    let modalImageEl = document.getElementById('choices-modal-image');
+    let modalDescriptionEl = document.getElementById('choices-modal-description');
+    let choice1 = document.getElementById('option1');
+    let choice2 = document.getElementById('option2');
+    
+    // Adding event listeners to exit modal
+    document.getElementById('choices-modal-options').focus();
 
+    document.getElementById('option1').addEventListener('click', function(){  
+        encounterResolution(currentEncounter, 1)
+        });
+    document.getElementById('option2').addEventListener('click', function(){
+        encounterResolution(currentEncounter, 2)
+        });
+    document.addEventListener('keydown', handleChoicesKeypress)
+
+    // Show modal
+    document.getElementById('choices-modal').classList.remove('hidden');
+    
+    // Conditionals
+    if(type === 'encounterTrigger'){
+        modalTitleEl.innerText = currentEncounter.trigger.title
+        modalImageEl.src = currentEncounter.trigger.image
+        modalDescriptionEl.innerHTML = currentEncounter.trigger.text
+        choice1.innerText = currentEncounter.trigger.option1
+        choice2.innerText = currentEncounter.trigger.option2
+    } 
+}
 
 function showDisplayModal(type, currentEncounter) {
-
+    isPlayerViewingModal = true
     // Caching elements
     let modalTitleEl = document.getElementById('display-modal-title');
     let modalImageEl = document.getElementById('display-modal-image');
     let modalDescriptionEl = document.getElementById('display-modal-description');
     
     // Adding event listeners to exit modal
-    document.addEventListener('keydown', function(event) {
-        closeModal('display-modal');
-    });
+    document.addEventListener('keydown', closeDisplayModal);
     
-    document.getElementById('display-modal').addEventListener('click', function(event) {
-        closeModal('display-modal', event);
-    });
+    document.getElementById('display-modal').addEventListener('click', closeDisplayModal)
 
     // Show modal
     document.getElementById('display-modal').classList.remove('hidden');
@@ -436,75 +466,41 @@ function showDisplayModal(type, currentEncounter) {
         modalTitleEl.innerText = "Close Encounters of the Cute Kind"
         modalImageEl.src = "./imgs/hero2.png"
         modalDescriptionEl.innerHTML = STORYLINE
-    } 
-    
-    
-    // let modalOptions = document.getElementById('modal-options');
-
-    // 
-    
-
-    // // Additional logic based on type
-    // if (type === 'encounterTrigger') {
-    //     // Highlights first button option
-    //     let currentSelectedOption = 'option1';
-    //     document.getElementById(currentSelectedOption).classList.add('highlight'); 
-        
-
-    //     document.getElementById('option1').textContent = currentEncounter.trigger.option1;
-    //     document.getElementById('option2').textContent = currentEncounter.trigger.option2;
-    //     modalOptions.style.display = "block";
-    //     // Remove existing event listeners to forces the player to chose an option and not dismiss modal
-    //     document.removeEventListener('keydown', closeModal); 
-    //     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
-    //     // Add event listeners to check for encounter buttons
-    //     document.getElementById('option1').addEventListener('click', function(){
-    //         encounterResolution(currentEncounter, 1)
-    //     } );
-    //     document.getElementById('option2').addEventListener('click', function(){
-    //         encounterResolution(currentEncounter, 2)
-    //     });
-    //     modalOptions.focus()
-    //     modalOptions.addEventListener('keydown', function(e) {
-    //         if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
-    //             // Toggle the selected option
-    //             document.getElementById(currentSelectedOption).classList.remove('highlight'); 
-    //             currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
-    //             document.getElementById(currentSelectedOption).classList.add('highlight'); 
-    //         } else if (e.key === "Enter" || e.key === " ") {
-    //             // Trigger the selected option's click event
-    //             document.getElementById(currentSelectedOption).click();
-    //         }
-    //     });
-        
-    // } else if (type === 'encounterResolution') {
-    //     modalOptions.style.display = "none";
-
-
-    //     } else if(type === 'intro'){
-    //         // Add event listeners to close modal
-    // modalOptions.style.display = "none";
-    // }
-    // else {
-    //     modalOptions.style.display = "none";
-
-    // }
-    // //... handle other types similarly
+    } else if (type === 'encounterResolution'){
+        console.log('encounter resolution: ', currentEncounter)
+        modalTitleEl.innerText = currentEncounter.title
+        modalImageEl.src = currentEncounter.image
+        modalDescriptionEl.innerHTML = currentEncounter.text
+    }
 }
 
+function handleChoicesKeypress(e) {
+    console.log(document.getElementById(currentSelectedOption))
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
+        // Toggle the selected option
+        document.getElementById(currentSelectedOption).classList.remove('highlight'); 
+        currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
+        document.getElementById(currentSelectedOption).classList.add('highlight'); 
+    } else if (e.key === "Enter" || e.key === " ") {
+        // Trigger the selected option's click event
+        document.getElementById(currentSelectedOption).click();
+    }
+}
+
+function closeDisplayModal(e) {
+    document.getElementById('display-modal').classList.add('hidden');
+    isPlayerViewingModal = false;
+    console.log('setting playerviewingmodal to false, and adding hidden class to display modal')
+    // Remove the listeners once the modal is closed
+    document.removeEventListener('keydown', closeDisplayModal);
+    document.getElementById('display-modal').removeEventListener('click', closeDisplayModal)
+}
 
 function closeModal(elId) {
     isPlayerViewingModal = false
+    console.log('setting playerviewingmodal to false, and adding hidden class to ' + elId)
     document.getElementById(elId).classList.add('hidden');
-    // TODO: add in a fuel cell check and the gameover call here  so that it won't interrupt other modals
-    render();
-
-    // Remove the event listeners
-    
-    // let modalOptions = document.getElementById('modal-options');
-    // modalOptions.removeEventListener('keydown', handleKeydown);
-    // document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
-
+    document.removeEventListener('keydown', handleChoicesKeypress)
 }
 
 function handleModalClickOutside(elId, event) {
@@ -606,3 +602,55 @@ init()
     // }
 
  */
+
+        // let modalOptions = document.getElementById('modal-options');
+
+    // 
+    
+
+    // // Additional logic based on type
+    // if (type === 'encounterTrigger') {
+    //     // Highlights first button option
+    //     let currentSelectedOption = 'option1';
+    //     document.getElementById(currentSelectedOption).classList.add('highlight'); 
+        
+
+    //     document.getElementById('option1').textContent = currentEncounter.trigger.option1;
+    //     document.getElementById('option2').textContent = currentEncounter.trigger.option2;
+    //     modalOptions.style.display = "block";
+    //     // Remove existing event listeners to forces the player to chose an option and not dismiss modal
+    //     document.removeEventListener('keydown', closeModal); 
+    //     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+    //     // Add event listeners to check for encounter buttons
+    //     document.getElementById('option1').addEventListener('click', function(){
+    //         encounterResolution(currentEncounter, 1)
+    //     } );
+    //     document.getElementById('option2').addEventListener('click', function(){
+    //         encounterResolution(currentEncounter, 2)
+    //     });
+    //     modalOptions.focus()
+    //     modalOptions.addEventListener('keydown', function(e) {
+    //         if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
+    //             // Toggle the selected option
+    //             document.getElementById(currentSelectedOption).classList.remove('highlight'); 
+    //             currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
+    //             document.getElementById(currentSelectedOption).classList.add('highlight'); 
+    //         } else if (e.key === "Enter" || e.key === " ") {
+    //             // Trigger the selected option's click event
+    //             document.getElementById(currentSelectedOption).click();
+    //         }
+    //     });
+        
+    // } else if (type === 'encounterResolution') {
+    //     modalOptions.style.display = "none";
+
+
+    //     } else if(type === 'intro'){
+    //         // Add event listeners to close modal
+    // modalOptions.style.display = "none";
+    // }
+    // else {
+    //     modalOptions.style.display = "none";
+
+    // }
+    // //... handle other types similarly
