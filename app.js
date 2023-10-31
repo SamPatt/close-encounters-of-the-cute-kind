@@ -53,7 +53,7 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `A Grateful Traveler!`,
             image: `/imgs/encounter_1_resolution_1.png`,
-            text: `Navigating through the wreckage, you discover a stranded traveler. His ship was attacked by space pirates, and he's been floating aimlessly ever since. Grateful for the timely rescue, he gifts you a fuel cell, a relic from his now-defunct ship. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `Navigating through the wreckage, you discover a stranded traveler. His ship was attacked by space pirates, and he's been floating aimlessly ever since. Grateful for the timely rescue, he gifts you a fuel cell, a relic from his now-defunct ship.`,
             outcome: 'gain1'
         },
         resolution2: {
@@ -75,14 +75,14 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `Stellar Photography!`,
             image: `/imgs/encounter_2_resolution_1.png`,
-            text: `You navigate your ship closer, capturing breathtaking images of the phenomenon. Nearby, an alien reconnaissance vessel, captivated by your audacity, approaches in peace. Impressed by your images and courage, they reward you with a fuel cell. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You navigate your ship closer, capturing breathtaking images of the phenomenon. Nearby, an alien reconnaissance vessel, captivated by your audacity, approaches in peace. Impressed by your images and courage, they reward you with a fuel cell.`,
             outcome: 'gain1'
 
         },
         resolution2: {
             title: `A Near Miss!`,
             image: `/imgs/encounter_2_resolution_2.png`,
-            text: `Exercising prudence, you decide to keep your distance. As you leave, you notice the vast energies from the event create unpredictable spatial waves. You're glad you left! <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `Exercising prudence, you decide to keep your distance. As you leave, you notice the vast energies from the event create unpredictable spatial waves.`,
             outcome: ''
         }
     },
@@ -99,7 +99,7 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `Bad photo op!`,
             image: `/imgs/encounter_3_resolution_1.png`,
-            text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed.`,
             outcome: 'lose1'
         },
         resolution2: {
@@ -123,13 +123,13 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `Galactic Armament Acquired!`,
             image: `/imgs/encounter_4_resolution_1.png`,
-            text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it.`,
             outcome: 'lose1AndGainWeapon'
         },
         resolution2: {
             title: `Trust in Preparedness!`,
             image: `/imgs/encounter_4_resolution_2.png`,
-            text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell.`,
             outcome: 'gain1'
         }
     }
@@ -146,13 +146,13 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `Desperate Measures, Successful Escape!`,
             image: `/imgs/encounter_5_resolution_1.png`,
-            text: `You make the tough call and jettison a fuel cell. The resulting explosion provides the necessary thrust, propelling your ship out of the black hole's formidable grasp. You're safe, albeit with one less fuel cell. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You make the tough call and jettison a fuel cell. The resulting explosion provides the necessary thrust, propelling your ship out of the black hole's formidable grasp. You're safe, albeit with one less fuel cell.`,
             outcome: 'lose1'
         },
         resolution2: {
             title: `Gravitational Struggle!`,
             image: `/imgs/obstacle_1.png`,
-            text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells.`,
             outcome: 'lose2'
         }
     }
@@ -169,13 +169,13 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution1: {
             title: `Successful Trade!`,
             image: `/imgs/encounter_6_resolution_1.png`,
-            text: `You decide to dock and are warmly greeted by the inhabitants of the space station. After sharing stories of your adventures, you make a fair trade and secure a fuel cell. The station's inhabitants wish you well on your journey. <br><br> Fuel cells: ${player.fuelCells}`,
+            text: `You decide to dock and are warmly greeted by the inhabitants of the space station. After sharing stories of your adventures, you make a fair trade and secure a fuel cell. The station's inhabitants wish you well on your journey.`,
             outcome: 'gain1'
         },
         resolution2: {
             title: `A good wager!`,
             image: `/imgs/encounter_6_resolution_2.png`,
-            text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!<br><br> Fuel cells: ${player.fuelCells}`,
+            text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!`,
             outcome: 'gain2'
 
         }
@@ -193,6 +193,7 @@ console.log(encounters)
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
 let currentSelectedOption = 'option1';
+let encounterToRemove = null;
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
 class Species {
@@ -311,16 +312,20 @@ function enemyCollision(){
 }
 
 
-function encounterTrigger(){
-    console.log('encounter collision')
-    const numOfRemainingEncounters = Object.keys(encounters).length
-    const currentEncounter = encounters['encounter'+(randomNumber(numOfRemainingEncounters) + 1)]
 
-    // TODO - switch over all showModal to using objects
-        // For now just passing in one for encounters
-        console.log('launching first encounter modal with encounterTrigger')
+function encounterTrigger(){
+    console.log('encounter collision');
+    const encounterKeys = Object.keys(encounters);  
+    const randomIndex = randomNumber(encounterKeys.length); 
+    const randomEncounterKey = encounterKeys[randomIndex];   
+
+    encounterToRemove = randomEncounterKey;
+    const currentEncounter = encounters[randomEncounterKey]; 
+
+    console.log('launching first encounter modal with encounterTrigger');
     showChoicesModal('encounterTrigger', currentEncounter);
 }
+
 
 function creatureCollision(){
     player.creaturesFound += 1
@@ -356,26 +361,36 @@ function randomNumber(max){
 
 function encounterResolution(currentEncounter, selectedOption){
     closeModal('choices-modal')
+    console.log('encounterResolution called')
     const currentResolution = currentEncounter['resolution'+selectedOption]
     let outcome = currentResolution.outcome
-    console.log(outcome)
     if(outcome){
         if(outcome === 'gain1'){
+            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells ++
+            console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'gain2'){
+            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells += 2
+            console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose1'){
+            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells --
+            console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose2'){
+            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells -= 2
+            console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose1AndGainWeapon'){
+            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells --
+            console.log(`fuel cells: ${player.fuelCells}`)
             player.hasWeapon = true
         }
     } else {
-        console.log('no change')
     }
-    delete encounters[currentEncounter]
+    delete encounters[encounterToRemove]
+    console.log(encounters)
     
     showDisplayModal('encounterResolution', currentResolution);
 }
@@ -423,14 +438,13 @@ function showChoicesModal(type, currentEncounter) {
     let choice2 = document.getElementById('option2');
     
     // Adding event listeners to exit modal
-    document.getElementById('choices-modal-options').focus();
 
     document.getElementById('option1').addEventListener('click', function(){  
         encounterResolution(currentEncounter, 1)
-        });
+        }, { once: true });
     document.getElementById('option2').addEventListener('click', function(){
         encounterResolution(currentEncounter, 2)
-        });
+        }, { once: true });
     document.addEventListener('keydown', handleChoicesKeypress)
 
     // Show modal
@@ -490,15 +504,14 @@ function handleChoicesKeypress(e) {
 function closeDisplayModal(e) {
     document.getElementById('display-modal').classList.add('hidden');
     isPlayerViewingModal = false;
-    console.log('setting playerviewingmodal to false, and adding hidden class to display modal')
     // Remove the listeners once the modal is closed
     document.removeEventListener('keydown', closeDisplayModal);
     document.getElementById('display-modal').removeEventListener('click', closeDisplayModal)
+    document.removeEventListener('keydown', handleChoicesKeypress)
 }
 
 function closeModal(elId) {
     isPlayerViewingModal = false
-    console.log('setting playerviewingmodal to false, and adding hidden class to ' + elId)
     document.getElementById(elId).classList.add('hidden');
     document.removeEventListener('keydown', handleChoicesKeypress)
 }
@@ -544,7 +557,6 @@ function render(){
 }
 
 function init(){
-    console.log('init, showDisplayModal')
     showDisplayModal('intro');
 }
 
