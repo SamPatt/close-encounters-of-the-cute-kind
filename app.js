@@ -4,7 +4,7 @@ console.log('We are here!')
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
-    [1, 4, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 5, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 4, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 4, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 4, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
@@ -31,6 +31,8 @@ const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature'
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
 
 const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_5.png', './imgs/species_4.png', './imgs/species_6.png']
+
+const SPECIES_CONGRATS_TEXT = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -196,11 +198,14 @@ let currentSelectedOption = 'option1';
 let encounterToRemove = null;
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
+let speciesCongratsText = [...SPECIES_CONGRATS_TEXT]
 class Species {
-    constructor(speciesName, image, levelDiscovered){
+    constructor(speciesName, image, levelDiscovered, title, text){
         this.speciesName = speciesName
         this.image = image
         this.levelDiscovered = levelDiscovered
+        this.title = title
+        this.text = text
     }
 }
 
@@ -210,6 +215,8 @@ const speciesPhotoTopEl = document.querySelector('#photo-top')
 const speciesPhotoBottomEl = document.querySelector('#photo-bottom')
 const speciesDescriptionTopEl = document.querySelector('#photo-top-description')
 const speciesDescriptionBottomEl = document.querySelector('#photo-bottom-description')
+const fuelContainerEl1 = document.querySelector('#fuel1')
+const fuelContainerEl2 = document.querySelector('#fuel2')
 
 /*----- event listeners -----*/
 document.addEventListener("keydown", keyBehavior);
@@ -366,23 +373,18 @@ function encounterResolution(currentEncounter, selectedOption){
     let outcome = currentResolution.outcome
     if(outcome){
         if(outcome === 'gain1'){
-            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells ++
             console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'gain2'){
-            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells += 2
             console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose1'){
-            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells --
             console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose2'){
-            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells -= 2
             console.log(`fuel cells: ${player.fuelCells}`)
         } else if (outcome === 'lose1AndGainWeapon'){
-            console.log(`outcome: ${outcome} before applied: fuel cells: ${player.fuelCells}`)
             player.fuelCells --
             console.log(`fuel cells: ${player.fuelCells}`)
             player.hasWeapon = true
@@ -390,26 +392,28 @@ function encounterResolution(currentEncounter, selectedOption){
     } else {
     }
     delete encounters[encounterToRemove]
-    console.log(encounters)
-    
     showDisplayModal('encounterResolution', currentResolution);
+
 }
 
 function renderCreatureModal(){
     let randomNumSpeciesName = randomNumber(speciesNames.length)
     let randomNumSpeciesImage = randomNumber(speciesImages.length)
+    let randomNumSpeciesCongratsText = randomNumber(speciesCongratsText.length)
     let randomSpecies = speciesNames[randomNumSpeciesName]
     let randomImage = speciesImages[randomNumSpeciesImage]
-    speciesInstances[randomSpecies] = new Species(randomSpecies, randomImage, player.level);
+    let randomCongratsText = speciesCongratsText[randomNumSpeciesCongratsText]
+    let title = 'You found a new species!'
+    let text = `${randomCongratsText} You decide to name them: <br><br> <span class="center"><h2>${randomSpecies}</h2></span><br>Well done! New species found: ${player.creaturesFound}`
 
-    console.log(speciesInstances)
-    const congratsText = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
-    let randomCongratsText = congratsText[randomNumber(congratsText.length)]
+    speciesInstances[randomSpecies] = new Species(randomSpecies, randomImage, player.level, title, text);
+
+console.log(speciesInstances[randomSpecies])
 
     speciesNames.splice(randomNumSpeciesName, 1)  // Removes the used species name so that it can't be duplicated later
     speciesImages.splice(randomNumSpeciesImage, 1)
     renderPhoto(randomSpecies)
-    showModal("You found a new species!", randomImage, `${randomCongratsText} You decide to name them: <h2>${randomSpecies}</h2>Well done! New species found: ${player.creaturesFound}`, 'creature');
+    showDisplayModal('creature', speciesInstances[randomSpecies], );
 
 }
 
@@ -428,6 +432,7 @@ function renderEnemyModal(){
 
 function showChoicesModal(type, currentEncounter) {
     isPlayerViewingModal = true
+    fuelRender()
     document.getElementById('option1').classList.add('highlight');
     document.getElementById('option2').classList.remove('highlight');
     // Caching elements
@@ -462,6 +467,7 @@ function showChoicesModal(type, currentEncounter) {
 
 function showDisplayModal(type, currentEncounter) {
     isPlayerViewingModal = true
+    fuelRender()
     // Caching elements
     let modalTitleEl = document.getElementById('display-modal-title');
     let modalImageEl = document.getElementById('display-modal-image');
@@ -474,6 +480,7 @@ function showDisplayModal(type, currentEncounter) {
 
     // Show modal
     document.getElementById('display-modal').classList.remove('hidden');
+    console.log(currentEncounter)
     
     // Conditionals
     if(type === 'intro'){
@@ -482,6 +489,10 @@ function showDisplayModal(type, currentEncounter) {
         modalDescriptionEl.innerHTML = STORYLINE
     } else if (type === 'encounterResolution'){
         console.log('encounter resolution: ', currentEncounter)
+        modalTitleEl.innerText = currentEncounter.title
+        modalImageEl.src = currentEncounter.image
+        modalDescriptionEl.innerHTML = currentEncounter.text
+    } else if (type === 'creature'){
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
         modalDescriptionEl.innerHTML = currentEncounter.text
@@ -520,6 +531,24 @@ function handleModalClickOutside(elId, event) {
     if (event.target === document.getElementById(elId)) {
         closeModal(elId);
     }
+}
+
+function fuelRender(){
+    fuelContainerEl1.innerHTML = ''
+    fuelContainerEl2.innerHTML = ''
+    console.log(player.fuelCells)
+    if(player.fuelCells <= 0){
+        triggerGameOver()
+    } else {
+        for(let i = 0; i < player.fuelCells; i++){
+            let imgEl1 = document.createElement('img');
+            let imgEl2 = document.createElement('img');
+            imgEl1.src = "./imgs/fuel_small.png";
+            imgEl2.src = "./imgs/fuel_small.png";
+            fuelContainerEl1.appendChild(imgEl1);
+            fuelContainerEl2.appendChild(imgEl2);
+        }
+}
 }
 
 function renderMaze(){
