@@ -411,84 +411,105 @@ function renderEnemyModal(){
 }
 
 
-function showModal(title, imgSrc, description, type, currentEncounter) {
-    isPlayerViewingModal = true
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-image').src = imgSrc;
-    document.getElementById('modal-description').innerHTML = description;
-    let modalOptions = document.getElementById('modal-options');
 
-    document.addEventListener('keydown', closeModal);
-    document.getElementById('modal').addEventListener('click', handleModalClickOutside);
-    document.getElementById('modal').classList.remove('hidden');
+function showDisplayModal(type, currentEncounter) {
+
+    // Caching elements
+    let modalTitleEl = document.getElementById('display-modal-title');
+    let modalImageEl = document.getElementById('display-modal-image');
+    let modalDescriptionEl = document.getElementById('display-modal-description');
+    
+    // Adding event listeners to exit modal
+    document.addEventListener('keydown', function(event) {
+        closeModal('display-modal');
+    });
+    
+    document.getElementById('display-modal').addEventListener('click', function(event) {
+        closeModal('display-modal', event);
+    });
+
+    // Show modal
+    document.getElementById('display-modal').classList.remove('hidden');
+    
+    // Conditionals
+    if(type === 'intro'){
+        modalTitleEl.innerText = "Close Encounters of the Cute Kind"
+        modalImageEl.src = "./imgs/hero2.png"
+        modalDescriptionEl.innerHTML = STORYLINE
+    } 
+    
+    
+    // let modalOptions = document.getElementById('modal-options');
+
+    // 
     
 
-    // Additional logic based on type
-    if (type === 'encounterTrigger') {
-        // Highlights first button option
-        let currentSelectedOption = 'option1';
-        document.getElementById(currentSelectedOption).classList.add('highlight'); 
+    // // Additional logic based on type
+    // if (type === 'encounterTrigger') {
+    //     // Highlights first button option
+    //     let currentSelectedOption = 'option1';
+    //     document.getElementById(currentSelectedOption).classList.add('highlight'); 
         
 
-        document.getElementById('option1').textContent = currentEncounter.trigger.option1;
-        document.getElementById('option2').textContent = currentEncounter.trigger.option2;
-        modalOptions.style.display = "block";
-        // Remove existing event listeners to forces the player to chose an option and not dismiss modal
-        document.removeEventListener('keydown', closeModal); 
-        document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
-        // Add event listeners to check for encounter buttons
-        document.getElementById('option1').addEventListener('click', function(){
-            encounterResolution(currentEncounter, 1)
-        } );
-        document.getElementById('option2').addEventListener('click', function(){
-            encounterResolution(currentEncounter, 2)
-        });
-        modalOptions.focus()
-        modalOptions.addEventListener('keydown', function(e) {
-            if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
-                // Toggle the selected option
-                document.getElementById(currentSelectedOption).classList.remove('highlight'); 
-                currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
-                document.getElementById(currentSelectedOption).classList.add('highlight'); 
-            } else if (e.key === "Enter" || e.key === " ") {
-                // Trigger the selected option's click event
-                document.getElementById(currentSelectedOption).click();
-            }
-        });
+    //     document.getElementById('option1').textContent = currentEncounter.trigger.option1;
+    //     document.getElementById('option2').textContent = currentEncounter.trigger.option2;
+    //     modalOptions.style.display = "block";
+    //     // Remove existing event listeners to forces the player to chose an option and not dismiss modal
+    //     document.removeEventListener('keydown', closeModal); 
+    //     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+    //     // Add event listeners to check for encounter buttons
+    //     document.getElementById('option1').addEventListener('click', function(){
+    //         encounterResolution(currentEncounter, 1)
+    //     } );
+    //     document.getElementById('option2').addEventListener('click', function(){
+    //         encounterResolution(currentEncounter, 2)
+    //     });
+    //     modalOptions.focus()
+    //     modalOptions.addEventListener('keydown', function(e) {
+    //         if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
+    //             // Toggle the selected option
+    //             document.getElementById(currentSelectedOption).classList.remove('highlight'); 
+    //             currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
+    //             document.getElementById(currentSelectedOption).classList.add('highlight'); 
+    //         } else if (e.key === "Enter" || e.key === " ") {
+    //             // Trigger the selected option's click event
+    //             document.getElementById(currentSelectedOption).click();
+    //         }
+    //     });
         
-    } else if (type === 'encounterResolution') {
-        modalOptions.style.display = "none";
+    // } else if (type === 'encounterResolution') {
+    //     modalOptions.style.display = "none";
 
 
-        } else if(type === 'intro'){
-            // Add event listeners to close modal
-    modalOptions.style.display = "none";
-    }
-    else {
-        modalOptions.style.display = "none";
+    //     } else if(type === 'intro'){
+    //         // Add event listeners to close modal
+    // modalOptions.style.display = "none";
+    // }
+    // else {
+    //     modalOptions.style.display = "none";
 
-    }
-    //... handle other types similarly
+    // }
+    // //... handle other types similarly
 }
 
 
-function closeModal() {
+function closeModal(elId) {
     isPlayerViewingModal = false
-    document.getElementById('modal').classList.add('hidden');
+    document.getElementById(elId).classList.add('hidden');
     // TODO: add in a fuel cell check and the gameover call here  so that it won't interrupt other modals
     render();
 
     // Remove the event listeners
     
-    let modalOptions = document.getElementById('modal-options');
-    modalOptions.removeEventListener('keydown', handleKeydown);
-    document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
+    // let modalOptions = document.getElementById('modal-options');
+    // modalOptions.removeEventListener('keydown', handleKeydown);
+    // document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
 
 }
 
-function handleModalClickOutside(event) {
-    if (event.target === document.getElementById('modal')) {
-        closeModal();
+function handleModalClickOutside(elId, event) {
+    if (event.target === document.getElementById(elId)) {
+        closeModal(elId);
     }
 }
 
@@ -527,7 +548,8 @@ function render(){
 }
 
 function init(){
-    showModal("Close Encounters of the Cute Kind", "./imgs/hero2.png", STORYLINE, 'intro');
+    console.log('init, showDisplayModal')
+    showDisplayModal('intro');
 }
 
 render()
@@ -551,6 +573,7 @@ init()
  * make encounters and creatures unknown initially - DONE
  * refactor to use two separate modals to fix event listener hell
  * fix deletion of encounters
+ * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
  *  */ 
     
 
