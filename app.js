@@ -3,13 +3,13 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 4, 4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 0, 4, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
     [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 0, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 3, 1, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -190,7 +190,7 @@ const ENCOUNTER_DESCRIPTIONS = {
 let speciesInstances = {};
 
 /*----- state variables -----*/
-let maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array
+let maze = MAP_LEVEL_ONE.map(row => row.slice()); // deep copy
 let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
 console.log(encounters)
 let shipDirection = '0deg'
@@ -359,9 +359,9 @@ function triggerGameOver(){
         img: './imgs/fuel3.png',
         text: `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}<br><br> Restarting in <b><span id="countdown">10</span></b> seconds...`,
     }
+    document.body.classList.add('shake-effect');
     setTimeout(function() {
-        // Code to be executed after a delay of 1 second
-        console.log("This will be logged after 1 second.");
+        document.body.classList.remove('shake-effect');
         showDisplayModal('gameOver', obj); 
     }, 3000);
     restartGameAfterDelay();
@@ -651,7 +651,7 @@ function restartGame(){
     document.getElementById('display-modal').classList.add('hidden'); // Hide the game over modal
     
     console.log('restart')
-    maze = MAP_LEVEL_ONE // Sets the maze as a copy of the MAP_LEVEL_ONE array encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
+    maze = MAP_LEVEL_ONE.map(row => row.slice());
     shipDirection = '0deg'
     isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
     currentSelectedOption = 'option1';

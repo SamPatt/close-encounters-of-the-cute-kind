@@ -231,3 +231,16 @@ img {
 .highlight {
     background-color: #5a9258;
 }
+
+@keyframes shake {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-5px, 5px); }
+    50% { transform: translate(5px, -5px); }
+    75% { transform: translate(-5px, -5px); }
+    100% { transform: translate(5px, 5px); }
+}
+
+.shake-effect {
+    animation: shake 0.1s; /* Adjust duration as needed */
+    animation-iteration-count: infinite; /* Infinite loop */
+}
