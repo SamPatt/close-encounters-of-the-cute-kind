@@ -16,7 +16,7 @@
     </header>
 
     <main class="play-area">
-        <div id="maze">
+        <div id="maze" class="special-border">
             <!-- maze layout -->
         </div>
         <div id="photos">
@@ -35,9 +35,11 @@
         </div>
     </main>
     <footer class="footer">
+        <button id="soundToggleBtn" onclick="toggleSound()">Music On</button>
+
     </footer>
     <div id="display-modal" class="modal hidden">
-        <div class="modal-content">
+        <div class="modal-content special-border">
             <div class="modal-title">
                 <h2 id="display-modal-title"></h2>
             </div>
@@ -59,8 +61,8 @@
             </div>
         </div>
     </div>
-    <div id="choices-modal" class="modal hidden">
-        <div class="modal-content">
+    <div id="choices-modal" class="modal hidden special-border">
+        <div class="modal-content special-border">
             <div class="modal-title">
                 <h2 id="choices-modal-title"></h2>
             </div>
@@ -78,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div id="choices-modal-options">
+            <div id="choices-modal-options" class="choices-container">
                 <button id="option1" class="modal-option">Option 1</button>
                 <button id="option2" class="modal-option">Option 2</button>
             </div>

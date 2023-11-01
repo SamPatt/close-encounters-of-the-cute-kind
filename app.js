@@ -227,6 +227,14 @@ class Species {
     }
 }
 
+// Audio
+
+let bgMusic = new Audio('./audio/music.mp3');
+bgMusic.loop = true;  // To make it loop infinitely
+bgMusic.volume = 0.1; // Reduce volume if required (0.0 is silent, 1.0 is full volume)
+bgMusic.play();
+
+
 /*----- cached elements  -----*/
 const mazeEl = document.querySelector('#maze')
 const speciesPhotoTopEl = document.querySelector('#photo-top')
@@ -255,6 +263,17 @@ function keyBehavior(e) {
     movePlayer('left')
   }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    let soundButton = document.getElementById('soundToggleBtn');
+    if (bgMusic.paused) {
+        soundButton.textContent = "Turn Music On";
+        soundButton.classList.add('soundOff');
+    } else {
+        soundButton.textContent = "Turn Music Off";
+        soundButton.classList.add('soundOn');
+    }
+});
 
 /*----- functions -----*/
 
@@ -414,6 +433,7 @@ function triggerGameOver(){
     // closeDisplayModal(); 
     isGameOver = true;
     closeDisplayModal()
+    soundOff()
     player.mazePosition = PLAYER_START.mazePosition;
     console.log('triggergameover');
     const obj = {
@@ -793,6 +813,31 @@ function triggerGameWon(){
     showDisplayModal('gameWon', gameWon)
 }
 
+function toggleSound() {
+    let soundButton = document.getElementById('soundToggleBtn');
+    
+    if (bgMusic.paused) {
+        bgMusic.play();
+        soundButton.textContent = "Turn Music Off";
+        soundButton.classList.remove('soundOff');
+        soundButton.classList.add('soundOn');
+    } else {
+        bgMusic.pause();
+        soundButton.textContent = "Turn Music On";
+        soundButton.classList.remove('soundOn');
+        soundButton.classList.add('soundOff');
+    }
+}
+
+function soundOff(){
+    let soundButton = document.getElementById('soundToggleBtn');
+    bgMusic.pause();
+        soundButton.textContent = "Turn Music On";
+        soundButton.classList.remove('soundOn');
+        soundButton.classList.add('soundOff');
+}
+
+
 function render(){
     renderMaze()
  
@@ -827,6 +872,7 @@ init()
  * make encounters and creatures unknown initially - DONE
  * refactor to use two separate modals to fix event listener hell - DONE
  * fix deletion of encounters - DONE
+ * improve borders - DONE
  * fix photo reset on new game
  * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
  *  */ 
@@ -835,81 +881,9 @@ init()
 
 
 /** OLD CODE
- * 
- * // This function checks if the user is trying to make a valid move
-// function checkIfWall(movementDirection){
-    
-//     let desiredCell;
-//     if(movementDirection === 'up'){
-//         desiredCell = maze[player.mazePosition[0] - 1][player.mazePosition[1]];
-//         console.log(desiredCell)
-//         if (desiredCell === 1){
-//             console.log('Wall; no movement')
-//             return false
-//         } else {
-//             return true
-//         }
-//     } else {
-//         return true
-//     }
-// }
 
     // ICEBOX - Allow for more wall styling which doesn't update with each render
     // if(classValue === 1){
     //     const randomChoice = Math.random() < 0.5 ? 'wall-asteroid' : 'wall-stars';
     //     divEl.classList.add(randomChoice)
     // }
-
- */
-
-        // let modalOptions = document.getElementById('modal-options');
-
-    // 
-    
-
-    // // Additional logic based on type
-    // if (type === 'encounterTrigger') {
-    //     // Highlights first button option
-    //     let currentSelectedOption = 'option1';
-    //     document.getElementById(currentSelectedOption).classList.add('highlight'); 
-        
-
-    //     document.getElementById('option1').textContent = currentEncounter.trigger.option1;
-    //     document.getElementById('option2').textContent = currentEncounter.trigger.option2;
-    //     modalOptions.style.display = "block";
-    //     // Remove existing event listeners to forces the player to chose an option and not dismiss modal
-    //     document.removeEventListener('keydown', closeModal); 
-    //     document.getElementById('modal').removeEventListener('click', handleModalClickOutside);
-    //     // Add event listeners to check for encounter buttons
-    //     document.getElementById('option1').addEventListener('click', function(){
-    //         encounterResolution(currentEncounter, 1)
-    //     } );
-    //     document.getElementById('option2').addEventListener('click', function(){
-    //         encounterResolution(currentEncounter, 2)
-    //     });
-    //     modalOptions.focus()
-    //     modalOptions.addEventListener('keydown', function(e) {
-    //         if (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "ArrowDown") {
-    //             // Toggle the selected option
-    //             document.getElementById(currentSelectedOption).classList.remove('highlight'); 
-    //             currentSelectedOption = currentSelectedOption === 'option1' ? 'option2' : 'option1'; 
-    //             document.getElementById(currentSelectedOption).classList.add('highlight'); 
-    //         } else if (e.key === "Enter" || e.key === " ") {
-    //             // Trigger the selected option's click event
-    //             document.getElementById(currentSelectedOption).click();
-    //         }
-    //     });
-        
-    // } else if (type === 'encounterResolution') {
-    //     modalOptions.style.display = "none";
-
-
-    //     } else if(type === 'intro'){
-    //         // Add event listeners to close modal
-    // modalOptions.style.display = "none";
-    // }
-    // else {
-    //     modalOptions.style.display = "none";
-
-    // }
-    // //... handle other types similarly
