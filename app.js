@@ -421,6 +421,7 @@ function encounterResolution(currentEncounter, selectedOption){
             player.hasWeapon = true
         }
     } else {
+        changeFuel(0)
         console.log('no change')
     }
     delete encounters[encounterToRemove]
@@ -547,6 +548,25 @@ function showDisplayModal(type, currentEncounter) {
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
         modalDescriptionEl.innerHTML = currentEncounter.text
+    } else if(type === 'gameWon'){
+        modalTitleEl.innerText = currentEncounter.title
+        modalImageEl.src = currentEncounter.image
+        modalDescriptionEl.innerHTML = currentEncounter.text
+        let timeLeft = RESTART_DELAY / 1000;
+        countdownInterval = setInterval(function() {
+            console.log('countdown begun')
+            timeLeft -= 1;
+            if(document.getElementById('countdown')){
+                document.getElementById('countdown').innerText = timeLeft;
+            }
+    
+            if(timeLeft <= 0) {
+                console.log('countdown ended')
+                clearInterval(countdownInterval); 
+                restartGame();
+            }
+        }, 1000); // Update every second
+        
     }
 }
 
@@ -571,6 +591,12 @@ function closeDisplayModal() {
     document.removeEventListener('keydown', closeDisplayModal);
     document.getElementById('display-modal').removeEventListener('click', closeDisplayModal)
     document.removeEventListener('keydown', handleChoicesKeypress)
+    // Check if game won
+    if(player.creaturesFound === 2 || player.creaturesFound === 4){
+        triggerNextLevel()
+        return
+    }
+    
 }
 
 function closeModal() {
@@ -666,12 +692,23 @@ function restartGame(){
         mazePosition: [...PLAYER_START.mazePosition]
     };
     init()
-
 }
 function triggerNextLevel(){
-
+    if(player.creaturesFound === 2){ // Change this to 4 when adding new level
+        triggerGameWon()
+    } else {
+        // This is where new level reset code goes
+    }
 }
 
+function triggerGameWon(){
+    const gameWon = {
+        title: 'YOU WIN!',
+        image: '/imgs/win.png',
+        text: `You found all the creatures and your photos are lifting earth's spirits, well done! <br><br>Game will restart in <span id="countdown">10</span> seconds...`
+    }
+    showDisplayModal('gameWon', gameWon)
+}
 
 function render(){
     renderMaze()
