@@ -3,13 +3,14 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 1, 0, 4, 0, 1, 4, 1, 0, 1, 0, 1, 3, 1, 1],
+    [2, 0, 1, 0, 4, 0, 1, 4, 1, 0, 1, 0, 1, 0, 1, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1],
     [1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1],
-    [1, 3, 0, 0, 0, 0, 1, 0, 0, 3, 0, 1, 1, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 4, 1, 5, 1, 0, 0, 4, 0, 0, 1, 4, 0, 0, 0, 1],
+    [1, 4, 1, 5, 1, 0, 0, 4, 0, 
+        , 1, 5, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -34,7 +35,20 @@ const SPECIES_IMAGES = ['./imgs/species_1.png', './imgs/species_2.png', './imgs/
 
 const SPECIES_CONGRATS_TEXT = [`So cute!`, `OMG adorable!`, `Heart-meltingly sweet!`, `Too cute to handle!`, `Aww, precious!`, `What a cutie pie!`, `Absolutely charming!`, `Irresistibly cute!`, `Look at those eyes!`, `Overloaded with cuteness!`, `Squee-worthy!`, `That's just darling!`, `Cuteness level: 1000!`, `So fluffy and cute!`, `Melted my heart!`, `Could it get any cuter?`, `That's some next-level cuteness!`, `A bundle of joy!`, `Pure adorableness!`, `Such a sweetie!`, `Cuteness overload!`, `I'm in love!`, `Too sweet to be real!`, `A true cutie!`, `Gushing over this cuteness!`];
 
-const RESTART_DELAY = 10000; 
+const RESTART_DELAY = 10000;
+
+// const ENEMY_PATHS = [
+//     [{x:5, y:4}, {x:5, y:3}, {x:5, y:2}, {x:5, y:1}, {x:5, y:2}, {x:5, y:3}, {x:5, y:4}, {x:5, y:5}],
+//     [{x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:3, y:9}, {x:2, y:9}, {x:1, y:9}, {x:2, y:9}, {x:3, y:9},{x:4, y:9}, {x:5, y:9},{x:6, y:9}, {x:7, y:9}],
+//     [{x:2, y:13}, {x:3, y:13}, {x:4, y:13}, {x:5, y:13}, {x:6, y:13}, {x:7, y:13}, {x:6, y:13}, {x:5, y:13},{x:4, y:13}, {x:3, y:13},{x:2, y:13}, {x:1, y:13}],
+// ];
+
+const ENEMY_PATHS = [
+    [{y:5, x:5}, {y:5, x:4}, {y:5, x:3}, {y:5, x:2}, {y:5, x:1}, {y:5, x:2}, {y:5, x:3}, {y:5, x:4}, {y:5, x:5}],
+    [{y:7, x:9}, {y:6, x:9}, {y:5, x:9}, {y:4, x:9}, {y:3, x:9}, {y:2, x:9}, {y:1, x:9}, {y:2, x:9}, {y:3, x:9}, {y:4, x:9}, {y:5, x:9}, {y:6, x:9}, {y:7, x:9}],
+    [{y:1, x:13},{y:2, x:13}, {y:3, x:13}, {y:4, x:13}, {y:5, x:13}, {y:6, x:13}, {y:7, x:13}, {y:6, x:13}, {y:5, x:13}, {y:4, x:13}, {y:3, x:13}, {y:2, x:13}, {y:1, x:13}],
+];
+
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -120,7 +134,7 @@ const ENCOUNTER_DESCRIPTIONS = {
         trigger: {
             title: `Mysterious Merchant's Offer!`,
             image: `/imgs/encounter_4.png`,
-            text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for one fuel cell. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
+            text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
             option1: `Trade a fuel cell for the weapon`,
             option2: `Trade your blueprints for a fuel cell`,
         },
@@ -128,7 +142,7 @@ const ENCOUNTER_DESCRIPTIONS = {
             title: `Galactic Armament Acquired!`,
             image: `/imgs/encounter_4_resolution_1.png`,
             text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it.`,
-            outcome: 'lose1AndGainWeapon'
+            outcome: 'lose2AndGainWeapon'
         },
         resolution2: {
             title: `Trust in Preparedness!`,
@@ -136,8 +150,7 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell.`,
             outcome: 'gain1'
         }
-    }
-    ,
+    },
 
     encounter5: {
         trigger: {
@@ -190,6 +203,8 @@ const ENCOUNTER_DESCRIPTIONS = {
 let speciesInstances = {};
 
 /*----- state variables -----*/
+let enemySteps = new Array(ENEMY_PATHS.length).fill(0);
+let enemyMoveInterval = setInterval(moveEnemies, 200); // Use setInterval as before to call moveEnemies periodically
 let maze = MAP_LEVEL_ONE.map(row => row.slice()); // deep copy
 let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
 console.log(encounters)
@@ -262,12 +277,50 @@ function movePlayer(direction){
     return
 }
 
+function moveEnemies() {
+    for (let i = 0; i < ENEMY_PATHS.length; i++) {
+        moveEnemyAlongPath(i);
+    }
+}
+function moveEnemyAlongPath(enemyIndex) {
+    const path = ENEMY_PATHS[enemyIndex];
+    const currentStep = enemySteps[enemyIndex];
+
+    // If we've reached the end of the path, loop back to the beginning
+    if (currentStep >= path.length) {
+        enemySteps[enemyIndex] = 0;
+        return;
+    }
+
+    // If it's not the first step, clear the previous position
+    if (currentStep > 0) {
+        const previousPosition = path[currentStep - 1];
+        maze[previousPosition.y][previousPosition.x] = 0;
+    }
+
+    const nextPosition = path[currentStep];
+    
+    // Check for player collision
+    if (isPlayerPosition(nextPosition.x, nextPosition.y)) {
+        console.log('enemy running into player')
+        enemyCollision();
+    }
+    // Move to next position
+    maze[nextPosition.y][nextPosition.x] = 3;
+
+    renderMaze()  // or render() if that's what you have
+
+    // Increase step count
+    enemySteps[enemyIndex]++;
+
+}
+
 function updateMazeAndPlayerPosition(desiredCell){
     let cellMovedFrom = player.mazePosition
     maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
     player.mazePosition = desiredCell
     maze[player.mazePosition[0]][player.mazePosition[1]] = 2
-    render()
+    renderMaze()
 }
 
 function moveOnPath(desiredCell){
@@ -305,6 +358,12 @@ function getDesiredMoveCell(directionOfMove) {
     return desiredPosition;
 }
 
+function isPlayerPosition(x, y) {
+    return maze[y][x] === 2;
+}
+
+console.log('is player position working' + isPlayerPosition(player.mazePosition[0], player.mazePosition[1]))
+
 function enemyCollision(){
     if(!player.hasWeapon){
         changeFuel(-1)
@@ -321,8 +380,10 @@ function enemyCollision(){
     } else {
         renderEnemyModal()
     }
-    // player.mazePosition = PLAYER_START.mazePosition
-    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    if(!isGameOver){
+        player.mazePosition = PLAYER_START.mazePosition
+        maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    }
 }
 
 
@@ -416,8 +477,8 @@ function encounterResolution(currentEncounter, selectedOption){
             changeFuel(-1)
         } else if (outcome === 'lose2'){
             changeFuel(-2)
-        } else if (outcome === 'lose1AndGainWeapon'){
-            changeFuel(-1)
+        } else if (outcome === 'lose2AndGainWeapon'){
+            changeFuel(-2)
             player.hasWeapon = true
         }
     } else {
@@ -517,11 +578,15 @@ function showDisplayModal(type, currentEncounter) {
     let modalImageEl = document.getElementById('display-modal-image');
     let modalDescriptionEl = document.getElementById('display-modal-description');
     
-    // Adding event listeners to exit modal only if game is still running
-    if(!isGameOver){
-        document.addEventListener('keydown', closeDisplayModal);
-        document.getElementById('display-modal').addEventListener('click', closeDisplayModal)
-    }
+    // Adding event listeners to exit modal only if game is still running, and adds a delay so the player doesn't mistakenly dismiss while moving ship
+    setTimeout(() => {
+        if(!isGameOver){
+            document.addEventListener('keydown', closeDisplayModal);
+            document.getElementById('display-modal').addEventListener('click', closeDisplayModal)
+        }
+      }, "500");
+      
+    
     
 
     // Show modal
@@ -671,7 +736,7 @@ function restartGame(){
     speciesDescriptionTopEl.innerText = 'Species: Undiscovered. No entry in photo archives'
     speciesDescriptionBottomEl.innerText = 'Species: Undiscovered. No entry in photo archives'
     document.getElementById('display-modal').classList.add('hidden'); // Hide the game over modal
-    
+    encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS));
     console.log('restart')
     maze = MAP_LEVEL_ONE.map(row => row.slice());
     shipDirection = '0deg'
