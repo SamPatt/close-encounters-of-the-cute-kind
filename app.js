@@ -3,7 +3,7 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [2, 0, 4, 4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
     [1, 0, 1, 0, 4, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
@@ -349,26 +349,33 @@ function creatureCollision(){
 
 
 function triggerGameOver(){
-    isGameOver = true
-    player.mazePosition = PLAYER_START.mazePosition
-    console.log('triggergameover')
+    // closeDisplayModal(); 
+    closeDisplayModal()
+    isGameOver = true;
+    player.mazePosition = PLAYER_START.mazePosition;
+    console.log('triggergameover');
     const obj = {
         title: 'GAME OVER',
         img: './imgs/fuel3.png',
         text: `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}<br><br> Restarting in <b><span id="countdown">10</span></b> seconds...`,
     }
-    showDisplayModal('gameOver', obj);
-
-    // Start the countdown
+    setTimeout(function() {
+        // Code to be executed after a delay of 1 second
+        console.log("This will be logged after 1 second.");
+        showDisplayModal('gameOver', obj); 
+    }, 3000);
     restartGameAfterDelay();
 }
+
 
 function restartGameAfterDelay(){
     let timeLeft = RESTART_DELAY / 1000;
     countdownInterval = setInterval(function() {
         console.log('countdown begun')
         timeLeft -= 1;
-        document.getElementById('countdown').innerText = timeLeft;
+        if(document.getElementById('countdown')){
+            document.getElementById('countdown').innerText = timeLeft;
+        }
 
         if(timeLeft <= 0) {
             console.log('countdown ended')
@@ -557,7 +564,7 @@ function handleChoicesKeypress(e) {
     console.log(document.getElementById(currentSelectedOption))
 }
 
-function closeDisplayModal(e) {
+function closeDisplayModal() {
     document.getElementById('display-modal').classList.add('hidden');
     isPlayerViewingModal = false;
     // Remove the listeners once the modal is closed
@@ -566,9 +573,9 @@ function closeDisplayModal(e) {
     document.removeEventListener('keydown', handleChoicesKeypress)
 }
 
-function closeModal(elId) {
+function closeModal() {
     isPlayerViewingModal = false
-    document.getElementById(elId).classList.add('hidden');
+    document.getElementById('choices-modal').classList.add('hidden');
     document.removeEventListener('keydown', handleChoicesKeypress)
 }
 
