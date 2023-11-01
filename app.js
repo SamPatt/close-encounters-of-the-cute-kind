@@ -3,9 +3,9 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1],
-    [1, 3, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 1, 0, 0, 0, 1, 0, 1, 3, 0, 0, 0, 0, 0, 1],
+    [2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [1, 0, 1, 0, 4, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
     [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
@@ -687,9 +687,10 @@ init()
  * Add encounter photos and modal - DONE
  * Add creature photos and modal - DONE
  * add in game over modal - DONE
- * create a reset
+ * create a reset - DONE
+ * species photos styling improvements
  * add new level
- * add all encounter images
+ * add all encounter images - DONE
  * add sounds
  * rotate ship on movement - DONE, hard!
  * animation between cells
@@ -697,8 +698,8 @@ init()
  * update walls so they look more uniform and less repetitive
  * fog of war
  * make encounters and creatures unknown initially - DONE
- * refactor to use two separate modals to fix event listener hell
- * fix deletion of encounters
+ * refactor to use two separate modals to fix event listener hell - DONE
+ * fix deletion of encounters - DONE
  * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
  *  */ 
     
