@@ -135,7 +135,7 @@ const ENCOUNTER_DESCRIPTIONS = {
             title: `Mysterious Merchant's Offer!`,
             image: `/imgs/encounter_4.png`,
             text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
-            option1: `Trade a fuel cell for the weapon`,
+            option1: `Trade 2 fuel cells for the weapon`,
             option2: `Trade your blueprints for a fuel cell`,
         },
         resolution1: {
@@ -211,6 +211,7 @@ console.log(encounters)
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
 let currentSelectedOption = 'option1';
+let eventListenersAttached = false; // Needed for the choices modal keypress event listeners
 let encounterToRemove = null;
 let isGameOver = false
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
@@ -480,6 +481,8 @@ function encounterResolution(currentEncounter, selectedOption){
         } else if (outcome === 'lose2AndGainWeapon'){
             changeFuel(-2)
             player.hasWeapon = true
+        } else {
+            console.log ('outcome shouldnt show here???')
         }
     } else {
         changeFuel(0)
@@ -536,8 +539,8 @@ function renderEnemyModal(){
 }
 
 function showChoicesModal(type, currentEncounter) {
-    isPlayerViewingModal = true
-    fuelRender()
+    isPlayerViewingModal = true;
+    currentEncounterGlobal = currentEncounter; // So that I can access this from the handleoptionclick functions
     document.getElementById('option1').classList.add('highlight');
     document.getElementById('option2').classList.remove('highlight');
     // Caching elements
@@ -549,12 +552,18 @@ function showChoicesModal(type, currentEncounter) {
     
     // Adding event listeners to exit modal
 
-    document.getElementById('option1').addEventListener('click', function(){  
-        encounterResolution(currentEncounter, 1)
-        }, { once: true });
-    document.getElementById('option2').addEventListener('click', function(){
-        encounterResolution(currentEncounter, 2)
-        }, { once: true });
+    // document.getElementById('option1').addEventListener('click', function(){  
+    //     encounterResolution(currentEncounter, 1)
+    //     }, { once: true });
+    // document.getElementById('option2').addEventListener('click', function(){
+    //     encounterResolution(currentEncounter, 2)
+    //     }, { once: true });
+    // Attach event listeners only if they haven't been attached before
+    if (!eventListenersAttached) {
+        document.getElementById('option1').addEventListener('click', handleOption1Click);
+        document.getElementById('option2').addEventListener('click', handleOption2Click);
+        eventListenersAttached = true; // Set a flag indicating that the event listeners are attached
+    }
     document.addEventListener('keydown', handleChoicesKeypress)
 
     // Show modal
@@ -632,6 +641,18 @@ function showDisplayModal(type, currentEncounter) {
             }
         }, 1000); // Update every second
         
+    }
+}
+
+function handleOption1Click() {
+    if (isPlayerViewingModal) {
+        encounterResolution(currentEncounterGlobal, 1);
+    }
+}
+
+function handleOption2Click() {
+    if (isPlayerViewingModal) {
+        encounterResolution(currentEncounterGlobal, 2);
     }
 }
 
@@ -781,7 +802,7 @@ function render(){
 function init(){
 
     render()
-    // showDisplayModal('intro');
+    showDisplayModal('intro');
 }
 
 render()
@@ -800,12 +821,13 @@ init()
  * add sounds
  * rotate ship on movement - DONE, hard!
  * animation between cells
- * enemy movement
+ * enemy movement - DONE, hard!
  * update walls so they look more uniform and less repetitive
  * fog of war
  * make encounters and creatures unknown initially - DONE
  * refactor to use two separate modals to fix event listener hell - DONE
  * fix deletion of encounters - DONE
+ * fix photo reset on new game
  * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
  *  */ 
     
