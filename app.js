@@ -3,13 +3,13 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 1, 0, 4, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1],
-    [1, 0, 1, 5, 0, 0, 4, 0, 0, 0, 0, 1, 5, 1, 0, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-    [1, 0, 0, 3, 1, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1],
+    [2, 0, 1, 0, 4, 0, 1, 4, 1, 0, 1, 0, 1, 3, 1, 1],
+    [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1],
+    [1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1],
+    [1, 3, 0, 0, 0, 0, 1, 0, 0, 3, 0, 1, 1, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
+    [1, 4, 1, 5, 1, 0, 0, 4, 0, 0, 1, 4, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -350,8 +350,8 @@ function creatureCollision(){
 
 function triggerGameOver(){
     // closeDisplayModal(); 
-    closeDisplayModal()
     isGameOver = true;
+    closeDisplayModal()
     player.mazePosition = PLAYER_START.mazePosition;
     console.log('triggergameover');
     const obj = {
@@ -363,7 +363,7 @@ function triggerGameOver(){
     setTimeout(function() {
         document.body.classList.remove('shake-effect');
         showDisplayModal('gameOver', obj); 
-    }, 3000);
+    }, 2000);
     restartGameAfterDelay();
 }
 
@@ -596,7 +596,11 @@ function closeDisplayModal() {
         triggerNextLevel()
         return
     }
-    
+    if(!isGameOver){
+        if(player.fuelCells <= 0){
+            triggerGameOver()
+        }
+    }
 }
 
 function closeModal() {
@@ -613,15 +617,7 @@ function handleModalClickOutside(elId, event) {
 
 function changeFuel(amount){
     player.fuelCells += amount; 
-    if(player.fuelCells <= 0){
-        if(!isGameOver){
-            triggerGameOver();
-        } else {
-            console.log('game is already over')
-        }
-    } else {
-        fuelRender();
-    }
+    fuelRender();
 }
 
 function fuelRender(){
@@ -702,6 +698,7 @@ function triggerNextLevel(){
 }
 
 function triggerGameWon(){
+    isGameOver = true
     const gameWon = {
         title: 'YOU WIN!',
         image: '/imgs/win.png',
@@ -719,7 +716,7 @@ function render(){
 function init(){
 
     render()
-    showDisplayModal('intro');
+    // showDisplayModal('intro');
 }
 
 render()
