@@ -24,6 +24,7 @@ let player = {
     ...PLAYER_START,
     mazePosition: [...PLAYER_START.mazePosition]
 }; 
+  
 
 const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature']
 
@@ -269,6 +270,14 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 /*----- functions -----*/
+
+const preloadImage = src => {
+    const img = new Image();
+    img.src = src;
+  };
+  
+  ['./imgs/blankphoto.png', './imgs/closeEncounterswireframe.png', './imgs/encounter_1.png', './imgs/encounter_1_resolution_1.png', './imgs/encounter_1_resolution_2.png', './imgs/encounter_2.png', './imgs/encounter_2_resolution_1.png', './imgs/encounter_2_resolution_2.png', './imgs/encounter_3.png', './imgs/encounter_3_resolution_1.png', './imgs/encounter_4.png', './imgs/encounter_4_resolution_1.png', './imgs/encounter_4_resolution_2.png', './imgs/encounter_5.png', './imgs/encounter_5_resolution_1.png', './imgs/encounter_6.png', './imgs/encounter_6_resolution_1.png', './imgs/encounter_6_resolution_2.png', './imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png', './imgs/enemy_ship_1.png', './imgs/fuel3.png', './imgs/fuel_small.png', './imgs/hero2.png', './imgs/obstacle_1.png', './imgs/ship.png', './imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_4.png', './imgs/species_5.png', './imgs/species_6.png', './imgs/star1.png', './imgs/stars.png', './imgs/unknown3.png', './imgs/weapon.png', './imgs/win.png'].forEach(preloadImage);
+  
 
 function keyBehavior(e) {
     e.preventDefault(); // prevents browser scrolling on keypress
