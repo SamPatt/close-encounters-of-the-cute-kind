@@ -165,7 +165,7 @@ const ENCOUNTER_DESCRIPTIONS = {
         },
         resolution2: {
             title: `Gravitational Struggle!`,
-            image: `/imgs/obstacle_1.png`,
+            image: `./imgs/obstacle_1.png`,
             text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells.`,
             outcome: 'lose2'
         }
@@ -750,8 +750,8 @@ function restartGame(){
     // Logic to restart the game
     speciesPhotoTopEl.src = "./imgs/blankphoto.png"
     speciesPhotoBottomEl.src = "./imgs/blankphoto.png"
-    speciesDescriptionTopEl.innerText = 'Species: Undiscovered. No entry in photo archives'
-    speciesDescriptionBottomEl.innerText = 'Species: Undiscovered. No entry in photo archives'
+    speciesDescriptionTopEl.innerText = 'Species: Undiscovered.'
+    speciesDescriptionBottomEl.innerText = 'Species: Undiscovered.'
     document.getElementById('display-modal').classList.add('hidden'); // Hide the game over modal
     encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS));
     maze = MAP_LEVEL_ONE.map(row => row.slice());
@@ -782,7 +782,7 @@ function triggerGameWon(){
     isGameOver = true
     const gameWon = {
         title: 'YOU WIN!',
-        image: '/imgs/win.png',
+        image: './imgs/win.png',
         text: `You found all the creatures and your photos are lifting earth's spirits, well done! <br><br>Game will restart in <span id="countdown">10</span> seconds...`
     }
     showDisplayModal('gameWon', gameWon)
