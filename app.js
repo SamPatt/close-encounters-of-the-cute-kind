@@ -3,14 +3,13 @@ console.log('We are here!')
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 1, 0, 4, 0, 1, 4, 1, 0, 1, 0, 1, 0, 1, 1],
+    [2, 0, 1, 0, 4, 0, 1, 5, 1, 0, 1, 4, 1, 0, 1, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1],
+    [1, 1, 1, 0, 1, 1, 0, 4, 1, 0, 1, 1, 0, 0, 1, 1],
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 4, 1, 5, 1, 0, 0, 4, 0, 
-        , 1, 5, 0, 0, 0, 1],
+    [1, 4, 1, 5, 1, 0, 0, 4, 0, 0, 1, 5, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -698,7 +697,7 @@ function closeDisplayModal() {
     document.getElementById('display-modal').removeEventListener('click', closeDisplayModal)
     document.removeEventListener('keydown', handleChoicesKeypress)
     // Check if game won
-    if(player.creaturesFound === 2 || player.creaturesFound === 4){
+    if(player.creaturesFound === 3 || player.creaturesFound === 6){
         triggerNextLevel()
         return
     }
@@ -796,7 +795,7 @@ function restartGame(){
     init()
 }
 function triggerNextLevel(){
-    if(player.creaturesFound === 2){ // Change this to 4 when adding new level
+    if(player.creaturesFound === 3){ // Change this to 6 when adding new level
         triggerGameWon()
     } else {
         // This is where new level reset code goes
@@ -876,14 +875,3 @@ init()
  * fix photo reset on new game
  * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
  *  */ 
-    
-
-
-
-/** OLD CODE
-
-    // ICEBOX - Allow for more wall styling which doesn't update with each render
-    // if(classValue === 1){
-    //     const randomChoice = Math.random() < 0.5 ? 'wall-asteroid' : 'wall-stars';
-    //     divEl.classList.add(randomChoice)
-    // }
