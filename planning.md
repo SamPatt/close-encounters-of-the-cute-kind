@@ -104,4 +104,26 @@ for each life lost:
     hide one life from display
 
 (stretch) add click listeners to intro/win/game over screens to dismiss them
-```
+
+/**TODO
+ * Add encounter photos and modal - DONE
+ * Add creature photos and modal - DONE
+ * add in game over modal - DONE
+ * create a reset - DONE
+ * species photos styling improvements
+ * add new level
+ * add all encounter images - DONE
+ * add sounds - DONE
+ * rotate ship on movement - DONE, hard!
+ * animation between cells
+ * enemy movement - DONE, hard!
+ * update walls so they look more uniform and less repetitive
+ * fog of war
+ * make encounters and creatures unknown initially - DONE
+ * refactor to use two separate modals to fix event listener hell - DONE
+ * fix deletion of encounters - DONE
+ * improve borders - DONE
+ * fix photo reset on new game
+ * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
+ *  */ 
+ ```

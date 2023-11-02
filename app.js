@@ -19,10 +19,11 @@ const PLAYER_START = {
     hasWeapon: false
 }
 
+// Sets the player object as a copy of the PLAYER_START object
 let player = {
     ...PLAYER_START,
     mazePosition: [...PLAYER_START.mazePosition]
-}; // Sets the player object as a copy of the PLAYER_START object
+}; 
 
 const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature']
 
@@ -34,18 +35,11 @@ const SPECIES_CONGRATS_TEXT = [`So cute!`, `OMG adorable!`, `Heart-meltingly swe
 
 const RESTART_DELAY = 10000;
 
-// const ENEMY_PATHS = [
-//     [{x:5, y:4}, {x:5, y:3}, {x:5, y:2}, {x:5, y:1}, {x:5, y:2}, {x:5, y:3}, {x:5, y:4}, {x:5, y:5}],
-//     [{x:6, y:9}, {x:5, y:9}, {x:4, y:9}, {x:3, y:9}, {x:2, y:9}, {x:1, y:9}, {x:2, y:9}, {x:3, y:9},{x:4, y:9}, {x:5, y:9},{x:6, y:9}, {x:7, y:9}],
-//     [{x:2, y:13}, {x:3, y:13}, {x:4, y:13}, {x:5, y:13}, {x:6, y:13}, {x:7, y:13}, {x:6, y:13}, {x:5, y:13},{x:4, y:13}, {x:3, y:13},{x:2, y:13}, {x:1, y:13}],
-// ];
-
 const ENEMY_PATHS = [
     [{y:5, x:5}, {y:5, x:4}, {y:5, x:3}, {y:5, x:2}, {y:5, x:1}, {y:5, x:2}, {y:5, x:3}, {y:5, x:4}, {y:5, x:5}],
     [{y:7, x:9}, {y:6, x:9}, {y:5, x:9}, {y:4, x:9}, {y:3, x:9}, {y:2, x:9}, {y:1, x:9}, {y:2, x:9}, {y:3, x:9}, {y:4, x:9}, {y:5, x:9}, {y:6, x:9}, {y:7, x:9}],
     [{y:1, x:13},{y:2, x:13}, {y:3, x:13}, {y:4, x:13}, {y:5, x:13}, {y:6, x:13}, {y:7, x:13}, {y:6, x:13}, {y:5, x:13}, {y:4, x:13}, {y:3, x:13}, {y:2, x:13}, {y:1, x:13}],
 ];
-
 
 const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
@@ -212,21 +206,19 @@ const ENCOUNTER_DESCRIPTIONS = {
             sound: 'goodSound'
         }
     }
-    
-    
 }
-let speciesInstances = {};
 
 /*----- state variables -----*/
-let enemySteps = new Array(ENEMY_PATHS.length).fill(0);
+let speciesInstances = {};
+let enemySteps = new Array(ENEMY_PATHS.length).fill(0); // creates an array with zeros to be able to track enemy step count
 let enemyMoveInterval = setInterval(moveEnemies, 200); // Use setInterval as before to call moveEnemies periodically
 let maze = MAP_LEVEL_ONE.map(row => row.slice()); // deep copy
 let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
+let encounterToRemove = null;
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
-let currentSelectedOption = 'option1';
-let eventListenersAttached = false; // Needed for the choices modal keypress event listeners
-let encounterToRemove = null;
+let currentSelectedOption = 'option1'; // so I can highlight first button in choices modal
+let eventListenersAttached = false; // Needed for the choices modal event listeners
 let isGameOver = false
 let speciesNames = [...SPECIES_NAMES] // Copies species names so that I can remove them from the array when found so they don't duplicate
 let speciesImages = [...SPECIES_IMAGES ]
@@ -248,7 +240,6 @@ bgMusic.loop = true;
 bgMusic.volume = 0.08; 
 bgMusic.play();
 
-// TODO add in these effects, fix image transitions
 
 /*----- cached elements  -----*/
 const mazeEl = document.querySelector('#maze')
@@ -261,8 +252,11 @@ const fuelContainerEl2 = document.querySelector('#fuel2')
 
 
 /*----- event listeners -----*/
+
+// Used for ship navigation
 document.addEventListener("keydown", keyBehavior);
 
+// Lets players turn off music
 document.addEventListener("DOMContentLoaded", function() {
     let soundButton = document.getElementById('soundToggleBtn');
     if (bgMusic.paused) {
@@ -277,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function() {
 /*----- functions -----*/
 
 function keyBehavior(e) {
-    e.preventDefault(); // The browser scrolling on keypress is annoying so this prevents it
+    e.preventDefault(); // prevents browser scrolling on keypress
   if (e.key === "ArrowUp") {
     shipDirection = '270deg'
     movePlayer('up')
@@ -352,9 +346,9 @@ function moveEnemyAlongPath(enemyIndex) {
 
 function updateMazeAndPlayerPosition(desiredCell){
     let cellMovedFrom = player.mazePosition
-    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0
+    maze[cellMovedFrom[0]][cellMovedFrom[1]] = 0 // Makes the cell we just left a 0 (path)
     player.mazePosition = desiredCell
-    maze[player.mazePosition[0]][player.mazePosition[1]] = 2
+    maze[player.mazePosition[0]][player.mazePosition[1]] = 2 // Makes the current cell a 2 (player's ship)
     renderMaze()
 }
 
@@ -379,6 +373,7 @@ function moveIntoCreature(desiredCell){
     creatureCollision()
 }
 
+// Does the calculation to find the cell we want from the array based on direction of movement
 function getDesiredMoveCell(directionOfMove) {
     let desiredPosition;
     if (directionOfMove === 'up') {
@@ -400,26 +395,26 @@ function isPlayerPosition(x, y) {
 
 function enemyCollision(){
     playSoundByIdentifier('enemySound')
-    if(!player.hasWeapon){
+    if(!player.hasWeapon){ // pew pew
         changeFuel(-1)
     }  
     if(player.fuelCells < 1){
 
-        if(!isGameOver){
+        if(!isGameOver){ // This is preventing a loop; couldn't figure out how to properly prevent this so added a flag check
             triggerGameOver('enemy')
         } else {
         }
     } else {
         renderEnemyModal()
     }
-    if(!isGameOver){
+    if(!isGameOver){ // Moves the player back to the maze start if they hit an enemy but still have fuel
         player.mazePosition = PLAYER_START.mazePosition
         maze[player.mazePosition[0]][player.mazePosition[1]] = 2
     }
 }
 
 
-
+// Selects a random encounter, sends it to the display modal, then sets encounterToRemove so it can be deleted after used
 function encounterTrigger(){
     const encounterKeys = Object.keys(encounters);  
     const randomIndex = randomNumber(encounterKeys.length); 
@@ -440,7 +435,6 @@ function creatureCollision(){
 
 
 function triggerGameOver(){
-    // closeDisplayModal(); 
     isGameOver = true;
     closeDisplayModal()
     soundOff()
@@ -451,7 +445,7 @@ function triggerGameOver(){
         text: `You ran out of fuel! <br><br> Creatures found: ${player.creaturesFound}<br><br> Restarting in <b><span id="countdown">10</span></b> seconds...`,
     }
     document.body.classList.add('shake-effect');
-    setTimeout(function() {
+    setTimeout(function() { // shakes screen for 2 seconds
         document.body.classList.remove('shake-effect');
         playSoundByIdentifier('gameOverSound')
         showDisplayModal('gameOver', obj); 
@@ -472,7 +466,7 @@ function restartGameAfterDelay(){
             clearInterval(countdownInterval); 
             restartGame();
         }
-    }, 1000); // Update every second
+    }, 1000);
 }
 
 
@@ -480,7 +474,7 @@ function restartGameAfterDelay(){
 function makeMazeDiv(classValue, isPlayer, direction) {
     const divEl = document.createElement('div');
     divEl.classList.add(GRID_CLASSES[classValue]);
-    if (isPlayer) {
+    if (isPlayer) { // rotates ship before rendering
         divEl.style.transform = `rotate(${direction})`;
     }
     mazeEl.appendChild(divEl);
@@ -536,10 +530,10 @@ function renderCreatureModal(){
     showDisplayModal('creature', speciesInstances[randomSpecies], );
 
 }
-
+// ICEBOX - Would like to make this a separate object like encounters
 function renderEnemyModal(){
     const enemyImages = ['./imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png']
-    const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"You're just wasting fuel out here, loser."`, `"Oh good, fresh content."`, `"I know it's wrong but ... meh, I don't really care."` ]
+    const enemyText = [`"You're brave coming out here in that, kid. Stupid though."`, `"Space isn't big enough for the both of us."`, `"You're just wasting fuel out here, loser."`, `"Oh good, I was getting bored out here."`, `"I know it's wrong but ... meh, I don't really care."` ]
     let randomImage = enemyImages[randomNumber(enemyImages.length)]
     let randomText = enemyText[randomNumber(enemyText.length)]
     const enemyObj = {
@@ -553,7 +547,7 @@ function renderEnemyModal(){
         text: `You're not going down without a fight. You line up your weapon and fire: It's a hit! The enemy ship flees.`
     }
 
-    if(player.hasWeapon){
+    if(player.hasWeapon){ // Passes different objects if they have the weapon
         showDisplayModal('enemy', weaponObj);
     } else {
     showDisplayModal('enemy', enemyObj);
@@ -573,14 +567,6 @@ function showChoicesModal(type, currentEncounter) {
     let choice1 = document.getElementById('option1');
     let choice2 = document.getElementById('option2');
     
-    // Adding event listeners to exit modal
-
-    // document.getElementById('option1').addEventListener('click', function(){  
-    //     encounterResolution(currentEncounter, 1)
-    //     }, { once: true });
-    // document.getElementById('option2').addEventListener('click', function(){
-    //     encounterResolution(currentEncounter, 2)
-    //     }, { once: true });
     // Attach event listeners only if they haven't been attached before
     if (!eventListenersAttached) {
         document.getElementById('option1').addEventListener('click', handleOption1Click);
@@ -662,7 +648,7 @@ function showDisplayModal(type, currentEncounter) {
                 clearInterval(countdownInterval); 
                 restartGame();
             }
-        }, 1000); // Update every second
+        }, 1000);
         
     }
 }
@@ -742,7 +728,6 @@ function fuelRender(){
     }
 }
 
-
 function renderMaze(){
     mazeEl.innerHTML = ''
     for(row of maze){
@@ -813,7 +798,7 @@ function triggerGameWon(){
     }
     showDisplayModal('gameWon', gameWon)
 }
-
+// Because I reference sounds in my encounters object before I initialize them I need to reference sound by string, so this matches the strings to the filename
 function getSoundByIdentifier(identifier) {
     let audio = new Audio();
     audio.volume = 0.3;
@@ -889,27 +874,3 @@ function init(){
 
 render()
 init()
-
-
-
-/**TODO
- * Add encounter photos and modal - DONE
- * Add creature photos and modal - DONE
- * add in game over modal - DONE
- * create a reset - DONE
- * species photos styling improvements
- * add new level
- * add all encounter images - DONE
- * add sounds
- * rotate ship on movement - DONE, hard!
- * animation between cells
- * enemy movement - DONE, hard!
- * update walls so they look more uniform and less repetitive
- * fog of war
- * make encounters and creatures unknown initially - DONE
- * refactor to use two separate modals to fix event listener hell - DONE
- * fix deletion of encounters - DONE
- * improve borders - DONE
- * fix photo reset on new game
- * mobile  make one column layout, make button to trigger slideout nav as overlay or modal, crop for icon, full species name
- *  */ 
