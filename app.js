@@ -64,18 +64,21 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `Amid the silent void, your ship's radar detects a faint distress signal, pulsating from a distant derelict ship. The eerie silence is broken only by this beacon. Do you dare approach?`,
             option1: `Venture forth and investigate`,
             option2: `Steer clear; it could be a ruse`,
+            sound: 'alertSound'
         },
         resolution1: {
             title: `A Grateful Traveler!`,
             image: `./imgs/encounter_1_resolution_1.png`,
             text: `Navigating through the wreckage, you discover a stranded traveler. His ship was attacked by space pirates, and he's been floating aimlessly ever since. Grateful for the timely rescue, he gifts you a fuel cell, a relic from his now-defunct ship.`,
-            outcome: 'gain1'
+            outcome: 'gain1',
+            sound: 'goodSound'
         },
         resolution2: {
             title: `Cosmic Deception!`,
             image: `./imgs/encounter_1_resolution_2.png`,
             text: `Your instincts were right! As you steer clear of the signal, you notice rogue spacecrafts lurking nearby. It was indeed a trap!`,
-            outcome: ''
+            outcome: '',
+            sound: 'goodSound'
         }
     },
     
@@ -86,19 +89,22 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `A mesmerizing and radiant interstellar event begins to manifest before your eyes, its origin and nature unknown. The beauty and mystery beckon. Do you seize the moment?`,
             option1: `Dive in and document!`,
             option2: `Exercise caution; maintain distance`,
+            sound: 'alertSound'
         },
         resolution1: {
             title: `Stellar Photography!`,
             image: `./imgs/encounter_2_resolution_1.png`,
             text: `You navigate your ship closer, capturing breathtaking images of the phenomenon. Nearby, an alien reconnaissance vessel, captivated by your audacity, approaches in peace. Impressed by your images and courage, they reward you with a fuel cell.`,
-            outcome: 'gain1'
+            outcome: 'gain1',
+            sound: 'goodSound'
 
         },
         resolution2: {
             title: `A Near Miss!`,
             image: `./imgs/encounter_2_resolution_2.png`,
             text: `Exercising prudence, you decide to keep your distance. As you leave, you notice the vast energies from the event create unpredictable spatial waves.`,
-            outcome: ''
+            outcome: '',
+            sound: 'goodSound'
         }
     },
     
@@ -110,18 +116,21 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `The vastness of space reveals a captivating nebula, shimmering with a myriad of colors and teeming with undiscovered lifeforms. Your sensors detect unusual bio-signatures. Could this be the moment you've been waiting for?`,
             option1: `Venture closer for a rare photo opportunity`,
             option2: `Chart its coordinates but keep a safe distance`,
+            sound: 'alertSound'
         },
         resolution1: {
             title: `Bad photo op!`,
             image: `./imgs/encounter_3_resolution_1.png`,
             text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed.`,
-            outcome: 'lose1'
+            outcome: 'lose1',
+            sound: 'badSound'
         },
         resolution2: {
             title: `Safety First!`,
             image: `./imgs/encounter_3.png`,
             text: `Recognizing the potential dangers of unknown territories, you log the nebula's coordinates for future reference and continue on your journey.`,
-            outcome: ''
+            outcome: '',
+            sound: 'goodSound'
 
         }
     },
@@ -134,18 +143,22 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
             option1: `Trade 2 fuel cells for the weapon`,
             option2: `Trade your blueprints for a fuel cell`,
+            sound: 'alertSound'
+
         },
         resolution1: {
             title: `Galactic Armament Acquired!`,
             image: `./imgs/encounter_4_resolution_1.png`,
             text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it.`,
-            outcome: 'lose2AndGainWeapon'
+            outcome: 'lose2AndGainWeapon',
+            sound: 'goodSound'
         },
         resolution2: {
             title: `Trust in Preparedness!`,
             image: `./imgs/encounter_4_resolution_2.png`,
             text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell.`,
-            outcome: 'gain1'
+            outcome: 'gain1',
+            sound: 'goodSound'
         }
     },
 
@@ -156,18 +169,21 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `The serenity of space is abruptly disrupted as your ship's alarms blare. You've unknowingly ventured too close to a black hole! Its gravitational pull is immense, and escape seems improbable. Your ship's AI suggests jettisoning a fuel cell to generate a massive thrust. The choice is yours.`,
             option1: `Jettison a fuel cell to aid escape`,
             option2: `Attempt to escape without sacrificing fuel`,
+            sound: 'alertSound'
         },
         resolution1: {
             title: `Desperate Measures, Successful Escape!`,
             image: `./imgs/encounter_5_resolution_1.png`,
             text: `You make the tough call and jettison a fuel cell. The resulting explosion provides the necessary thrust, propelling your ship out of the black hole's formidable grasp. You're safe, albeit with one less fuel cell.`,
-            outcome: 'lose1'
+            outcome: 'lose1',
+            sound: 'goodSound'
         },
         resolution2: {
             title: `Gravitational Struggle!`,
             image: `./imgs/obstacle_1.png`,
             text: `You decide to trust your ship's capabilities and attempt to escape without sacrificing any fuel. The struggle is intense, and the black hole's pull is relentless. By the time you manage to break free, the excessive energy consumption has drained two of your fuel cells.`,
-            outcome: 'lose2'
+            outcome: 'lose2',
+            sound: 'badSound'
         }
     }
     ,
@@ -179,19 +195,21 @@ const ENCOUNTER_DESCRIPTIONS = {
             text: `As you traverse the vastness of space, a friendly transmission is received from a nearby space station. The station's commander invites you aboard for a short respite and mentions they have a busy cantina where wagers are made.`,
             option1: `Dock, rest, and trade for a fuel cell`,
             option2: `Visit the cantina and make a wager`,
+            sound: 'alertSound'
         },
         resolution1: {
             title: `Successful Trade!`,
             image: `./imgs/encounter_6_resolution_1.png`,
             text: `You decide to dock and are warmly greeted by the inhabitants of the space station. After sharing stories of your adventures, you make a fair trade and secure a fuel cell. The station's inhabitants wish you well on your journey.`,
-            outcome: 'gain1'
+            outcome: 'gain1',
+            sound: 'goodSound'
         },
         resolution2: {
             title: `A good wager!`,
             image: `./imgs/encounter_6_resolution_2.png`,
             text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!`,
-            outcome: 'gain2'
-
+            outcome: 'gain2',
+            sound: 'goodSound'
         }
     }
     
@@ -223,13 +241,14 @@ class Species {
     }
 }
 
-// Audio
+// Audio, credits in HTML
 
 let bgMusic = new Audio('./audio/music.mp3');
-bgMusic.loop = true;  // To make it loop infinitely
-bgMusic.volume = 0.1; // Reduce volume if required (0.0 is silent, 1.0 is full volume)
+bgMusic.loop = true;
+bgMusic.volume = 0.08; 
 bgMusic.play();
 
+// TODO add in these effects, fix image transitions
 
 /*----- cached elements  -----*/
 const mazeEl = document.querySelector('#maze')
@@ -240,8 +259,22 @@ const speciesDescriptionBottomEl = document.querySelector('#photo-bottom-descrip
 const fuelContainerEl1 = document.querySelector('#fuel1')
 const fuelContainerEl2 = document.querySelector('#fuel2')
 
+
 /*----- event listeners -----*/
 document.addEventListener("keydown", keyBehavior);
+
+document.addEventListener("DOMContentLoaded", function() {
+    let soundButton = document.getElementById('soundToggleBtn');
+    if (bgMusic.paused) {
+        soundButton.textContent = "Turn Music On";
+        soundButton.classList.add('soundOff');
+    } else {
+        soundButton.textContent = "Turn Music Off";
+        soundButton.classList.add('soundOn');
+    }
+});
+
+/*----- functions -----*/
 
 function keyBehavior(e) {
     e.preventDefault(); // The browser scrolling on keypress is annoying so this prevents it
@@ -259,19 +292,6 @@ function keyBehavior(e) {
     movePlayer('left')
   }
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    let soundButton = document.getElementById('soundToggleBtn');
-    if (bgMusic.paused) {
-        soundButton.textContent = "Turn Music On";
-        soundButton.classList.add('soundOff');
-    } else {
-        soundButton.textContent = "Turn Music Off";
-        soundButton.classList.add('soundOn');
-    }
-});
-
-/*----- functions -----*/
 
 function movePlayer(direction){
     if(isPlayerViewingModal){
@@ -323,7 +343,7 @@ function moveEnemyAlongPath(enemyIndex) {
     // Move to next position
     maze[nextPosition.y][nextPosition.x] = 3;
 
-    renderMaze()  // or render() if that's what you have
+    renderMaze() 
 
     // Increase step count
     enemySteps[enemyIndex]++;
@@ -379,6 +399,7 @@ function isPlayerPosition(x, y) {
 
 
 function enemyCollision(){
+    playSoundByIdentifier('enemySound')
     if(!player.hasWeapon){
         changeFuel(-1)
     }  
@@ -411,6 +432,7 @@ function encounterTrigger(){
 
 
 function creatureCollision(){
+    playSoundByIdentifier('goodSound')
     player.creaturesFound += 1
     renderCreatureModal()
     render()
@@ -431,6 +453,7 @@ function triggerGameOver(){
     document.body.classList.add('shake-effect');
     setTimeout(function() {
         document.body.classList.remove('shake-effect');
+        playSoundByIdentifier('gameOverSound')
         showDisplayModal('gameOver', obj); 
     }, 2000);
     restartGameAfterDelay();
@@ -576,6 +599,7 @@ function showChoicesModal(type, currentEncounter) {
         modalDescriptionEl.innerHTML = currentEncounter.trigger.text
         choice1.innerText = currentEncounter.trigger.option1
         choice2.innerText = currentEncounter.trigger.option2
+        playSoundByIdentifier(currentEncounter.trigger.sound)
     } 
 }
 
@@ -610,6 +634,7 @@ function showDisplayModal(type, currentEncounter) {
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
         modalDescriptionEl.innerHTML = currentEncounter.text
+        playSoundByIdentifier(currentEncounter.sound)
     } else if (type === 'creature'){
         modalTitleEl.innerText = currentEncounter.title
         modalImageEl.src = currentEncounter.image
@@ -780,6 +805,7 @@ function triggerNextLevel(){
 
 function triggerGameWon(){
     isGameOver = true
+    playSoundByIdentifier('gameWinSound')
     const gameWon = {
         title: 'YOU WIN!',
         image: './imgs/win.png',
@@ -787,6 +813,42 @@ function triggerGameWon(){
     }
     showDisplayModal('gameWon', gameWon)
 }
+
+function getSoundByIdentifier(identifier) {
+    let audio = new Audio();
+    audio.volume = 0.3;
+  
+    if (identifier === 'badSound') {
+      audio.src = './audio/bad_1.mp3';
+      audio.volume = 0.3; 
+    } else if (identifier === 'goodSound') {
+      audio.src = './audio/good_1.mp3';
+      audio.volume = 0.3; 
+    } else if (identifier === 'enemySound') {
+      audio.src = './audio/enemyCollide.mp3';
+    } else if (identifier === 'gameOverSound') {
+      audio.src = './audio/gameOver.mp3';
+      audio.volume = 0.3; 
+    } else if (identifier === 'gameWinSound') {
+      audio.src = './audio/gameWin.mp3';
+      audio.volume = 0.3;
+    } else if (identifier === 'alertSound') {
+      audio.src = './audio/alert.mp3';
+      audio.volume = 0.3;
+    } else {
+      console.error('No sound found for identifier:', identifier);
+      return null;
+    }
+  
+    return audio;
+  }
+
+function playSoundByIdentifier(identifier) {
+    const sound = getSoundByIdentifier(identifier);
+    if (sound) {
+      sound.play();
+    }
+  }
 
 function toggleSound() {
     let soundButton = document.getElementById('soundToggleBtn');
