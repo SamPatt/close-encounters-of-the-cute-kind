@@ -26,7 +26,7 @@ let player = {
 }; 
   
 
-const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature', 'unknown']
+const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature', 'unknown', 'fog']
 
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
 
@@ -512,12 +512,14 @@ function restartGameAfterDelay(){
 
 function makeMazeDiv(classValue, isPlayer, direction) {
     const divEl = document.createElement('div');
-    divEl.classList.add(GRID_CLASSES[classValue]);
+    // If it's fog, add the 'fog' class, otherwise use the class from GRID_CLASSES
+    divEl.classList.add(classValue === 'fog' ? 'fog' : GRID_CLASSES[classValue]);
     if (isPlayer) { // rotates ship before rendering
         divEl.style.transform = `rotate(${direction})`;
     }
     mazeEl.appendChild(divEl);
 }
+
 
 
 function randomNumber(max){
@@ -767,20 +769,67 @@ function fuelRender(){
     }
 }
 
-function renderMaze(){
-    mazeEl.innerHTML = ''
-    for(row of maze){
-        for(value of row){
-            if(value !== 2){
-            makeMazeDiv(value)
-            } else {
-                makeMazeDiv(value, true, shipDirection);
+function renderMaze() {
+    mazeEl.innerHTML = '';
+    const playerPos = player.mazePosition;
+    const playerDir = shipDirection; // assuming shipDirection is a global variable keeping track of the player's current direction
 
+    for (let y = 0; y < maze.length; y++) {
+        for (let x = 0; x < maze[y].length; x++) {
+            if (isVisibleToPlayer(playerPos, playerDir, x, y)) {
+                // If the cell is visible to the player
+                makeMazeDiv(maze[y][x], isPlayerPosition(x, y), playerDir);
+            } else {
+                // If the cell is not visible, we might want to render it differently (e.g., darker)
+                makeInvisibleMazeDiv();
             }
         }
-        
     }
 }
+
+function makeInvisibleMazeDiv() {
+    const divEl = document.createElement('div');
+    divEl.classList.add('fog'); // This class should make the cell look like it's covered in fog
+    mazeEl.appendChild(divEl);
+}
+
+// This function was written by ChatGPT
+function isVisibleToPlayer(playerPos, playerDir, x, y) {
+    // Player's current position is always visible.
+    if (x === playerPos[1] && y === playerPos[0]) {
+        return true;
+    }
+
+    // Calculate the relative position of the cell to the player.
+    const deltaX = x - playerPos[1];
+    const deltaY = y - playerPos[0];
+
+    // Cells directly adjacent to the player should also always be visible.
+    if (Math.abs(deltaX) <= 1 && Math.abs(deltaY) <= 1) {
+        return true;
+    }
+
+    // Determine visibility based on player's direction for cells further away.
+    switch (playerDir) {
+        case '0deg': // facing right
+            return deltaY >= -2 && deltaY <= 2 && deltaX > 0 && deltaX <= 3 ||
+                   Math.abs(deltaY) <= 1 && deltaX > 3 && deltaX <= 5;
+        case '90deg': // facing down
+            return deltaX >= -2 && deltaX <= 2 && deltaY > 0 && deltaY <= 3 ||
+                   Math.abs(deltaX) <= 1 && deltaY > 3 && deltaY <= 5;
+        case '180deg': // facing left
+            return deltaY >= -2 && deltaY <= 2 && deltaX < 0 && deltaX >= -3 ||
+                   Math.abs(deltaY) <= 1 && deltaX < -3 && deltaX >= -5;
+        case '270deg': // facing up
+            return deltaX >= -2 && deltaX <= 2 && deltaY < 0 && deltaY >= -3 ||
+                   Math.abs(deltaX) <= 1 && deltaY < -3 && deltaY >= -5;
+        default:
+            return false; // If direction is unknown, no cells are visible
+    }
+}
+
+
+
 
 function renderPhoto(name){
     if(speciesPhotoTopEl.classList.contains('blank')){

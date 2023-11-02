@@ -107,6 +107,26 @@ img {
     flex: 1;
 }
 
+.fog {
+    /* Rounded corners to soften the edges */
+    border-radius: 15px;
+  
+    /* Box shadow to give a softer edge instead of a solid border */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  
+    /* Reduced opacity for the fog effect */
+    opacity: 0.8;
+  
+    /* Use background to create a misty look */
+    background: rgba(0, 0, 0, 0.8);
+  
+    /* Optionally, use a blur filter to soften the fog's appearance further */
+    filter: blur(1px);
+  
+    /* Transition for the fog effect to make it appear smoother */
+    transition: opacity 0.5s ease, filter 0.5s ease;
+  }
+
 .path {
     background-color: black;
 }
