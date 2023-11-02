@@ -1,13 +1,13 @@
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 1, 0, 4, 0, 1, 5, 1, 0, 1, 4, 1, 0, 1, 1],
+    [2, 0, 1, 0, 6, 0, 1, 6, 1, 0, 1, 6, 1, 0, 1, 1],
     [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 1, 1, 0, 1, 1, 0, 4, 1, 0, 1, 1, 0, 0, 1, 1],
+    [1, 1, 1, 0, 1, 1, 0, 6, 1, 0, 1, 6, 0, 0, 1, 1],
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1],
     [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 4, 1, 5, 1, 0, 0, 4, 0, 0, 1, 5, 0, 0, 0, 1],
+    [1, 6, 1, 6, 1, 0, 0, 6, 0, 0, 1, 6, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ];
 
@@ -26,7 +26,7 @@ let player = {
 }; 
   
 
-const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature']
+const GRID_CLASSES = ['path', 'wall', 'player', 'enemy', 'encounter', 'creature', 'unknown']
 
 const SPECIES_NAMES = ['Fluxorgon', 'Blipblorp', 'Cuddlexian', 'Quizzlit', 'Pluffigon', 'Wobblex', 'Zibzorb', 'Nuzzletron', 'Grizzlebee', 'Fluffinate', 'Glimblatt', 'Squizzelar', 'Mubbleflop', 'Zoopzop', 'Jibberjell', 'Wigglimon', 'Cluzzleclank', 'Blibberfudge', 'Fuzzlequark', 'Zumblezot', 'Plopplip', 'Quibquab', 'Buzzleboon', 'Dribbledorf', 'Flibblestix'];
 
@@ -71,9 +71,9 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution2: {
             title: `Cosmic Deception!`,
             image: `./imgs/encounter_1_resolution_2.png`,
-            text: `Your instincts were right! As you steer clear of the signal, you notice rogue spacecrafts lurking nearby. It was indeed a trap!`,
-            outcome: '',
-            sound: 'goodSound'
+            text: `As you steer clear of the signal, you notice rogue spacecrafts lurking nearby. It was indeed a trap! You need to burn a fuel cell to escape quickly.`,
+            outcome: 'lose1',
+            sound: 'badSound'
         }
     },
     
@@ -135,9 +135,9 @@ const ENCOUNTER_DESCRIPTIONS = {
         trigger: {
             title: `Mysterious Merchant's Offer!`,
             image: `./imgs/encounter_4.png`,
-            text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
+            text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells.`,
             option1: `Trade 2 fuel cells for the weapon`,
-            option2: `Trade your blueprints for a fuel cell`,
+            option2: `Decline the offer`,
             sound: 'alertSound'
 
         },
@@ -151,8 +151,8 @@ const ENCOUNTER_DESCRIPTIONS = {
         resolution2: {
             title: `Trust in Preparedness!`,
             image: `./imgs/encounter_4_resolution_2.png`,
-            text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell.`,
-            outcome: 'gain1',
+            text: `You choose to decline the offer. You can't part with two fuel cells! The merchant nods, and departs.`,
+            outcome: '',
             sound: 'goodSound'
         }
     },
@@ -271,6 +271,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 /*----- functions -----*/
 
+placeCreaturesAndObstacles(maze, 4, 5); // Randomizes creatures and encounters on maze
+
 const preloadImage = src => {
     const img = new Image();
     img.src = src;
@@ -278,6 +280,34 @@ const preloadImage = src => {
   
   ['./imgs/blankphoto.png', './imgs/closeEncounterswireframe.png', './imgs/encounter_1.png', './imgs/encounter_1_resolution_1.png', './imgs/encounter_1_resolution_2.png', './imgs/encounter_2.png', './imgs/encounter_2_resolution_1.png', './imgs/encounter_2_resolution_2.png', './imgs/encounter_3.png', './imgs/encounter_3_resolution_1.png', './imgs/encounter_4.png', './imgs/encounter_4_resolution_1.png', './imgs/encounter_4_resolution_2.png', './imgs/encounter_5.png', './imgs/encounter_5_resolution_1.png', './imgs/encounter_6.png', './imgs/encounter_6_resolution_1.png', './imgs/encounter_6_resolution_2.png', './imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png', './imgs/enemy_ship_1.png', './imgs/fuel3.png', './imgs/fuel_small.png', './imgs/hero2.png', './imgs/obstacle_1.png', './imgs/ship.png', './imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_4.png', './imgs/species_5.png', './imgs/species_6.png', './imgs/star1.png', './imgs/stars.png', './imgs/unknown3.png', './imgs/weapon.png', './imgs/win.png'].forEach(preloadImage);
   
+// I got tired of playing the same maze so this randomizes which unknown are creatures and obstacles
+function placeCreaturesAndObstacles(maze, creatureCount, obstacleCount) {
+  // Collect all the indices where creatures and obstacles can be placed.
+  const placeablePositions = [];
+  maze.forEach((row, rowIndex) => {
+    row.forEach((cell, colIndex) => {
+      if (cell === 6) {
+        placeablePositions.push([rowIndex, colIndex]);
+      }
+    });
+  });
+
+  // Shuffle the placeable positions
+  for (let i = placeablePositions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [placeablePositions[i], placeablePositions[j]] = [placeablePositions[j], placeablePositions[i]];
+  }
+
+  // Place creatures (4) and obstacles (5)
+  for (let i = 0; i < creatureCount; i++) {
+    const [row, col] = placeablePositions.pop();
+    maze[row][col] = 4;
+  }
+  for (let i = 0; i < obstacleCount; i++) {
+    const [row, col] = placeablePositions.pop();
+    maze[row][col] = 5;
+  }
+}
 
 function keyBehavior(e) {
     e.preventDefault(); // prevents browser scrolling on keypress
@@ -695,7 +725,7 @@ function closeDisplayModal() {
     document.getElementById('display-modal').removeEventListener('click', closeDisplayModal)
     document.removeEventListener('keydown', handleChoicesKeypress)
     // Check if game won
-    if(player.creaturesFound === 3 || player.creaturesFound === 6){
+    if(player.creaturesFound === 4 || player.creaturesFound === 8){
         triggerNextLevel()
         return
     }
@@ -786,11 +816,13 @@ function restartGame(){
     player = {
         ...PLAYER_START,
         mazePosition: [...PLAYER_START.mazePosition]
+    
     };
+    placeCreaturesAndObstacles(maze, 4, 5);
     init()
 }
 function triggerNextLevel(){
-    if(player.creaturesFound === 3){ // Change this to 6 when adding new level
+    if(player.creaturesFound === 4){ // Change this to 6 when adding new level
         triggerGameWon()
     } else {
         // This is where new level reset code goes
