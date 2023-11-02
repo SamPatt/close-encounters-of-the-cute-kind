@@ -1,5 +1,3 @@
-console.log('We are here!')
-
 /*----- constants -----*/
 const MAP_LEVEL_ONE = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -62,20 +60,20 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter1: {
         trigger: {
             title: `Mysterious Signal Echoes!`,
-            image: `/imgs/encounter_1.png`,
+            image: `./imgs/encounter_1.png`,
             text: `Amid the silent void, your ship's radar detects a faint distress signal, pulsating from a distant derelict ship. The eerie silence is broken only by this beacon. Do you dare approach?`,
             option1: `Venture forth and investigate`,
             option2: `Steer clear; it could be a ruse`,
         },
         resolution1: {
             title: `A Grateful Traveler!`,
-            image: `/imgs/encounter_1_resolution_1.png`,
+            image: `./imgs/encounter_1_resolution_1.png`,
             text: `Navigating through the wreckage, you discover a stranded traveler. His ship was attacked by space pirates, and he's been floating aimlessly ever since. Grateful for the timely rescue, he gifts you a fuel cell, a relic from his now-defunct ship.`,
             outcome: 'gain1'
         },
         resolution2: {
             title: `Cosmic Deception!`,
-            image: `/imgs/encounter_1_resolution_2.png`,
+            image: `./imgs/encounter_1_resolution_2.png`,
             text: `Your instincts were right! As you steer clear of the signal, you notice rogue spacecrafts lurking nearby. It was indeed a trap!`,
             outcome: ''
         }
@@ -84,21 +82,21 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter2: {
         trigger: {
             title: `Cosmic Phenomenon Emerges!`,
-            image: `/imgs/encounter_2.png`,
+            image: `./imgs/encounter_2.png`,
             text: `A mesmerizing and radiant interstellar event begins to manifest before your eyes, its origin and nature unknown. The beauty and mystery beckon. Do you seize the moment?`,
             option1: `Dive in and document!`,
             option2: `Exercise caution; maintain distance`,
         },
         resolution1: {
             title: `Stellar Photography!`,
-            image: `/imgs/encounter_2_resolution_1.png`,
+            image: `./imgs/encounter_2_resolution_1.png`,
             text: `You navigate your ship closer, capturing breathtaking images of the phenomenon. Nearby, an alien reconnaissance vessel, captivated by your audacity, approaches in peace. Impressed by your images and courage, they reward you with a fuel cell.`,
             outcome: 'gain1'
 
         },
         resolution2: {
             title: `A Near Miss!`,
-            image: `/imgs/encounter_2_resolution_2.png`,
+            image: `./imgs/encounter_2_resolution_2.png`,
             text: `Exercising prudence, you decide to keep your distance. As you leave, you notice the vast energies from the event create unpredictable spatial waves.`,
             outcome: ''
         }
@@ -108,20 +106,20 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter3: {
         trigger: {
             title: `Ethereal Nebula Sighting!`,
-            image: `/imgs/encounter_3.png`,
+            image: `./imgs/encounter_3.png`,
             text: `The vastness of space reveals a captivating nebula, shimmering with a myriad of colors and teeming with undiscovered lifeforms. Your sensors detect unusual bio-signatures. Could this be the moment you've been waiting for?`,
             option1: `Venture closer for a rare photo opportunity`,
             option2: `Chart its coordinates but keep a safe distance`,
         },
         resolution1: {
             title: `Bad photo op!`,
-            image: `/imgs/encounter_3_resolution_1.png`,
+            image: `./imgs/encounter_3_resolution_1.png`,
             text: `With bated breath, you approach the nebula. Suddenly, a magnetic surge from the nebula affects your ship's navigation systems. You're forced to use a fuel cell to recalibrate, and you leave, disappointed.`,
             outcome: 'lose1'
         },
         resolution2: {
             title: `Safety First!`,
-            image: `/imgs/encounter_3.png`,
+            image: `./imgs/encounter_3.png`,
             text: `Recognizing the potential dangers of unknown territories, you log the nebula's coordinates for future reference and continue on your journey.`,
             outcome: ''
 
@@ -132,20 +130,20 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter4: {
         trigger: {
             title: `Mysterious Merchant's Offer!`,
-            image: `/imgs/encounter_4.png`,
+            image: `./imgs/encounter_4.png`,
             text: `A lone merchant ship, adorned with symbols from a distant galaxy, hails you. The captain offers you a weapon for two fuel cells. He also admires your colorful ship's appearance, and offers to buy the ship's blueprints from you for a fuel cell.`,
             option1: `Trade 2 fuel cells for the weapon`,
             option2: `Trade your blueprints for a fuel cell`,
         },
         resolution1: {
             title: `Galactic Armament Acquired!`,
-            image: `/imgs/encounter_4_resolution_1.png`,
+            image: `./imgs/encounter_4_resolution_1.png`,
             text: `You decide to make the trade. The weapon is unlike anything you've seen before, pulsating with a mysterious energy. The merchant assures you of its potency against any space threats. As you hand over a fuel cell, you hope the trade proves to be worth it.`,
             outcome: 'lose2AndGainWeapon'
         },
         resolution2: {
             title: `Trust in Preparedness!`,
-            image: `/imgs/encounter_4_resolution_2.png`,
+            image: `./imgs/encounter_4_resolution_2.png`,
             text: `You choose to sell your ship's blueprints. The merchant nods, and after receiving them sends you the fuel cell.`,
             outcome: 'gain1'
         }
@@ -154,14 +152,14 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter5: {
         trigger: {
             title: `The Inescapable Grasp of a Black Hole!`,
-            image: `/imgs/encounter_5.png`,
+            image: `./imgs/encounter_5.png`,
             text: `The serenity of space is abruptly disrupted as your ship's alarms blare. You've unknowingly ventured too close to a black hole! Its gravitational pull is immense, and escape seems improbable. Your ship's AI suggests jettisoning a fuel cell to generate a massive thrust. The choice is yours.`,
             option1: `Jettison a fuel cell to aid escape`,
             option2: `Attempt to escape without sacrificing fuel`,
         },
         resolution1: {
             title: `Desperate Measures, Successful Escape!`,
-            image: `/imgs/encounter_5_resolution_1.png`,
+            image: `./imgs/encounter_5_resolution_1.png`,
             text: `You make the tough call and jettison a fuel cell. The resulting explosion provides the necessary thrust, propelling your ship out of the black hole's formidable grasp. You're safe, albeit with one less fuel cell.`,
             outcome: 'lose1'
         },
@@ -177,20 +175,20 @@ const ENCOUNTER_DESCRIPTIONS = {
     encounter6: {
         trigger: {
             title: `A Welcoming Space Station!`,
-            image: `/imgs/encounter_6.png`,
+            image: `./imgs/encounter_6.png`,
             text: `As you traverse the vastness of space, a friendly transmission is received from a nearby space station. The station's commander invites you aboard for a short respite and mentions they have a busy cantina where wagers are made.`,
             option1: `Dock, rest, and trade for a fuel cell`,
             option2: `Visit the cantina and make a wager`,
         },
         resolution1: {
             title: `Successful Trade!`,
-            image: `/imgs/encounter_6_resolution_1.png`,
+            image: `./imgs/encounter_6_resolution_1.png`,
             text: `You decide to dock and are warmly greeted by the inhabitants of the space station. After sharing stories of your adventures, you make a fair trade and secure a fuel cell. The station's inhabitants wish you well on your journey.`,
             outcome: 'gain1'
         },
         resolution2: {
             title: `A good wager!`,
-            image: `/imgs/encounter_6_resolution_2.png`,
+            image: `./imgs/encounter_6_resolution_2.png`,
             text: `Eager to try your luck, you visit the cantina and spend the evening gambling. Luck is on your side, you win 2 fuel cells!`,
             outcome: 'gain2'
 
@@ -206,7 +204,6 @@ let enemySteps = new Array(ENEMY_PATHS.length).fill(0);
 let enemyMoveInterval = setInterval(moveEnemies, 200); // Use setInterval as before to call moveEnemies periodically
 let maze = MAP_LEVEL_ONE.map(row => row.slice()); // deep copy
 let encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS)); // Copies encounters object so I can remove encounters as they occur
-console.log(encounters)
 let shipDirection = '0deg'
 let isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
 let currentSelectedOption = 'option1';
@@ -321,7 +318,6 @@ function moveEnemyAlongPath(enemyIndex) {
     
     // Check for player collision
     if (isPlayerPosition(nextPosition.x, nextPosition.y)) {
-        console.log('enemy running into player')
         enemyCollision();
     }
     // Move to next position
@@ -381,20 +377,16 @@ function isPlayerPosition(x, y) {
     return maze[y][x] === 2;
 }
 
-console.log('is player position working' + isPlayerPosition(player.mazePosition[0], player.mazePosition[1]))
 
 function enemyCollision(){
     if(!player.hasWeapon){
         changeFuel(-1)
-    }
-    
-    console.log(player.fuelCells)
+    }  
     if(player.fuelCells < 1){
-        console.log('ran into enemy and out of fuel')
+
         if(!isGameOver){
             triggerGameOver('enemy')
         } else {
-            console.log('game is already over')
         }
     } else {
         renderEnemyModal()
@@ -408,15 +400,12 @@ function enemyCollision(){
 
 
 function encounterTrigger(){
-    console.log('encounter collision');
     const encounterKeys = Object.keys(encounters);  
     const randomIndex = randomNumber(encounterKeys.length); 
     const randomEncounterKey = encounterKeys[randomIndex];   
 
     encounterToRemove = randomEncounterKey;
     const currentEncounter = encounters[randomEncounterKey]; 
-
-    console.log('launching first encounter modal with encounterTrigger');
     showChoicesModal('encounterTrigger', currentEncounter);
 }
 
@@ -434,7 +423,6 @@ function triggerGameOver(){
     closeDisplayModal()
     soundOff()
     player.mazePosition = PLAYER_START.mazePosition;
-    console.log('triggergameover');
     const obj = {
         title: 'GAME OVER',
         img: './imgs/fuel3.png',
@@ -452,14 +440,12 @@ function triggerGameOver(){
 function restartGameAfterDelay(){
     let timeLeft = RESTART_DELAY / 1000;
     countdownInterval = setInterval(function() {
-        console.log('countdown begun')
         timeLeft -= 1;
         if(document.getElementById('countdown')){
             document.getElementById('countdown').innerText = timeLeft;
         }
 
         if(timeLeft <= 0) {
-            console.log('countdown ended')
             clearInterval(countdownInterval); 
             restartGame();
         }
@@ -487,7 +473,6 @@ function encounterResolution(currentEncounter, selectedOption){
     currentSelectedOption = 'option1' // resets this for the new choices modal display
     const currentResolution = currentEncounter['resolution'+selectedOption]
     let outcome = currentResolution.outcome
-    console.log('outcome = ' + outcome)
     if(outcome){
         if(outcome === 'gain1'){
             changeFuel(1)
@@ -501,11 +486,9 @@ function encounterResolution(currentEncounter, selectedOption){
             changeFuel(-2)
             player.hasWeapon = true
         } else {
-            console.log ('outcome shouldnt show here???')
         }
     } else {
         changeFuel(0)
-        console.log('no change')
     }
     delete encounters[encounterToRemove]
     showDisplayModal('encounterResolution', currentResolution);
@@ -523,8 +506,6 @@ function renderCreatureModal(){
     let text = `${randomCongratsText} You decide to name them: <br><br> <span class="center"><h2>${randomSpecies}</h2></span><br>Well done! New species found: ${player.creaturesFound}`
 
     speciesInstances[randomSpecies] = new Species(randomSpecies, randomImage, player.level, title, text);
-
-console.log(speciesInstances[randomSpecies])
 
     speciesNames.splice(randomNumSpeciesName, 1)  // Removes the used species name so that it can't be duplicated later
     speciesImages.splice(randomNumSpeciesImage, 1)
@@ -647,14 +628,12 @@ function showDisplayModal(type, currentEncounter) {
         modalDescriptionEl.innerHTML = currentEncounter.text
         let timeLeft = RESTART_DELAY / 1000;
         countdownInterval = setInterval(function() {
-            console.log('countdown begun')
             timeLeft -= 1;
             if(document.getElementById('countdown')){
                 document.getElementById('countdown').innerText = timeLeft;
             }
     
             if(timeLeft <= 0) {
-                console.log('countdown ended')
                 clearInterval(countdownInterval); 
                 restartGame();
             }
@@ -686,7 +665,6 @@ function handleChoicesKeypress(e) {
         // Trigger the selected option's click event
         document.getElementById(currentSelectedOption).click();
     }
-    console.log(document.getElementById(currentSelectedOption))
 }
 
 function closeDisplayModal() {
@@ -728,7 +706,6 @@ function changeFuel(amount){
 function fuelRender(){
     fuelContainerEl1.innerHTML = ''
     fuelContainerEl2.innerHTML = ''
-    console.log(player.fuelCells)
 
     for(let i = 0; i < player.fuelCells; i++){
         let imgEl1 = document.createElement('img');
@@ -777,7 +754,6 @@ function restartGame(){
     speciesDescriptionBottomEl.innerText = 'Species: Undiscovered. No entry in photo archives'
     document.getElementById('display-modal').classList.add('hidden'); // Hide the game over modal
     encounters = JSON.parse(JSON.stringify(ENCOUNTER_DESCRIPTIONS));
-    console.log('restart')
     maze = MAP_LEVEL_ONE.map(row => row.slice());
     shipDirection = '0deg'
     isPlayerViewingModal = false // This is used to prevent movement while viewing a modal
