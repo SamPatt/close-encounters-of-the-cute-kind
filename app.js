@@ -346,6 +346,21 @@ function movePlayer(direction){
     return
 }
 
+// Does the calculation to find the cell we want from the array based on direction of movement
+function getDesiredMoveCell(directionOfMove) {
+    let desiredPosition;
+    if (directionOfMove === 'up') {
+        desiredPosition = [player.mazePosition[0] - 1, player.mazePosition[1]];
+    } else if (directionOfMove === 'down') {
+        desiredPosition = [player.mazePosition[0] + 1, player.mazePosition[1]];
+    } else if (directionOfMove === 'right') {
+        desiredPosition = [player.mazePosition[0], player.mazePosition[1] + 1];
+    } else if (directionOfMove === 'left') {
+        desiredPosition = [player.mazePosition[0], player.mazePosition[1] - 1];
+    }
+    return desiredPosition;
+}
+
 function moveEnemies() {
     for (let i = 0; i < ENEMY_PATHS.length; i++) {
         moveEnemyAlongPath(i);
@@ -412,20 +427,7 @@ function moveIntoCreature(desiredCell){
     creatureCollision()
 }
 
-// Does the calculation to find the cell we want from the array based on direction of movement
-function getDesiredMoveCell(directionOfMove) {
-    let desiredPosition;
-    if (directionOfMove === 'up') {
-        desiredPosition = [player.mazePosition[0] - 1, player.mazePosition[1]];
-    } else if (directionOfMove === 'down') {
-        desiredPosition = [player.mazePosition[0] + 1, player.mazePosition[1]];
-    } else if (directionOfMove === 'right') {
-        desiredPosition = [player.mazePosition[0], player.mazePosition[1] + 1];
-    } else if (directionOfMove === 'left') {
-        desiredPosition = [player.mazePosition[0], player.mazePosition[1] - 1];
-    }
-    return desiredPosition;
-}
+
 
 function isPlayerPosition(x, y) {
     return maze[y][x] === 2;
