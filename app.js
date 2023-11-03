@@ -46,7 +46,7 @@ const STORYLINE = `
     It's the year 2241, and humanity is... bored. <br><br>
 
     You're just launching your career as an space wildlife photographer, and you have a plan: find the 
-    cutest creatures in the galaxy and share them with the world! <br><br>
+    cutest creatures in the galaxy and share them with the world. Find <b>4</b> to win! <br><br>
 
     <b>But beware:</b> space is lawless, and if you aren't careful, your precious fuel cells will be stolen!
 `;
@@ -280,7 +280,7 @@ const preloadImage = src => {
   
   ['./imgs/blankphoto.png', './imgs/closeEncounterswireframe.png', './imgs/encounter_1.png', './imgs/encounter_1_resolution_1.png', './imgs/encounter_1_resolution_2.png', './imgs/encounter_2.png', './imgs/encounter_2_resolution_1.png', './imgs/encounter_2_resolution_2.png', './imgs/encounter_3.png', './imgs/encounter_3_resolution_1.png', './imgs/encounter_4.png', './imgs/encounter_4_resolution_1.png', './imgs/encounter_4_resolution_2.png', './imgs/encounter_5.png', './imgs/encounter_5_resolution_1.png', './imgs/encounter_6.png', './imgs/encounter_6_resolution_1.png', './imgs/encounter_6_resolution_2.png', './imgs/enemy_1.png', './imgs/enemy_2.png', './imgs/enemy_3.png', './imgs/enemy_ship_1.png', './imgs/fuel3.png', './imgs/fuel_small.png', './imgs/hero2.png', './imgs/obstacle_1.png', './imgs/ship.png', './imgs/species_1.png', './imgs/species_2.png', './imgs/species_3.png', './imgs/species_4.png', './imgs/species_5.png', './imgs/species_6.png', './imgs/star1.png', './imgs/stars.png', './imgs/unknown3.png', './imgs/weapon.png', './imgs/win.png'].forEach(preloadImage);
   
-// I got tired of playing the same maze so this randomizes which unknown are creatures and obstacles
+// I got tired of playing the same maze so this randomizes which unknown are creatures and obstacles; ChatGPT helped with this function
 function placeCreaturesAndObstacles(maze, creatureCount, obstacleCount) {
   // Collect all the indices where creatures and obstacles can be placed.
   const placeablePositions = [];
@@ -780,7 +780,6 @@ function renderMaze() {
                 // If the cell is visible to the player
                 makeMazeDiv(maze[y][x], isPlayerPosition(x, y), playerDir);
             } else {
-                // If the cell is not visible, we might want to render it differently (e.g., darker)
                 makeInvisibleMazeDiv();
             }
         }
@@ -789,7 +788,7 @@ function renderMaze() {
 
 function makeInvisibleMazeDiv() {
     const divEl = document.createElement('div');
-    divEl.classList.add('fog'); // This class should make the cell look like it's covered in fog
+    divEl.classList.add('fog');
     mazeEl.appendChild(divEl);
 }
 
@@ -845,7 +844,7 @@ function renderPhoto(name){
 }
 
 function restartGame(){
-    // Logic to restart the game
+    // Reset photos
     speciesPhotoTopEl.src = "./imgs/blankphoto.png"
     speciesPhotoBottomEl.src = "./imgs/blankphoto.png"
     speciesDescriptionTopEl.innerText = 'Species: Undiscovered.'
@@ -870,8 +869,8 @@ function restartGame(){
     placeCreaturesAndObstacles(maze, 4, 5);
     init()
 }
-function triggerNextLevel(){
-    if(player.creaturesFound === 4){ // Change this to 6 when adding new level
+function triggerNextLevel(){ 
+    if(player.creaturesFound === 4){ // Change this to 8 when adding new level
         triggerGameWon()
     } else {
         // This is where new level reset code goes
@@ -884,7 +883,7 @@ function triggerGameWon(){
     const gameWon = {
         title: 'YOU WIN!',
         image: './imgs/win.png',
-        text: `You found all the creatures and your photos are lifting earth's spirits, well done! <br><br>Game will restart in <span id="countdown">10</span> seconds...`
+        text: `You found 4 creatures and your photos are lifting earth's spirits, well done! <br><br>Game will restart in <span id="countdown">10</span> seconds...`
     }
     showDisplayModal('gameWon', gameWon)
 }
@@ -952,8 +951,6 @@ function soundOff(){
 
 function render(){
     renderMaze()
- 
-
 }
 
 function init(){
