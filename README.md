@@ -12,6 +12,8 @@ Close Encounters of the Cute Kind is a JavaScript browser game built in one week
 
 You're a space wildlife photographer hunting for cute creatures, while avoiding the dangers of the cosmos!
 
+![Cute Creature](./imgs/species_6.png)
+
 Growing up I remember playing simple maze adventures games with my Dad in MS-DOS. This game is meant to emulate that style. If you have fond memories of those games too, send me a message and tell me your favorite!
 
 ### Technologies used
