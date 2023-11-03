@@ -4,6 +4,10 @@
 
 ## Play
 
+The game uses keyboard arrow keys to navigate a maze in space. Either mouse or keyboard can be used to make game choices.
+
+Play the game here:
+
 [Close Encounters of the Cute Kind](http://sampatt.com/close-encounters-of-the-cute-kind/)
 
 ## Description
