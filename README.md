@@ -6,7 +6,7 @@
 
 Play the game here:
 
-[Close Encounters of the Cute Kind](http://sampatt.com/close-encounters-of-the-cute-kind/)
+[Close Encounters of the Cute Kind](https://sampatt.github.io/close-encounters-of-the-cute-kind/)
 
 ## Description
 
